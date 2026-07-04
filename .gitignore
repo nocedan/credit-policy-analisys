@@ -1,0 +1,15 @@
+# data is not versioned (cookiecutter-data-science convention)
+/data/
+
+# jupyter
+.ipynb_checkpoints/
+
+# python
+__pycache__/
+*.py[cod]
+.venv/
+
+# editors / OS
+.vscode/
+.idea/
+.DS_Store
