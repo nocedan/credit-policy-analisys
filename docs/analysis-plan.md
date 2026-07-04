@@ -22,10 +22,13 @@ business team — all with a visual, insight-driven approach.
 
 - [x] **1.0 Initial exploration**: schemas, grain/keys, join coverage, target definition,
       missingness, sentinel values, feature distributions, directional features-vs-target look
-- [x] Identify structural issues: many-to-many join, -999999 sentinels, structural missingness,
-      target only for `Contratado`, rising vintage default rate
-- [x] Draft open questions for the client (target window, Aprovado vs Contratado,
-      feature coverage gap, snapshot availability at decision time)
+- [x] Resolve grain: business key is `uuid` + application date (`DATA` / `REFERENCIA`),
+      unique in both tables; join on `uuid` alone explodes and must not be used
+- [x] Identify structural issues: -999999 sentinels, structural missingness,
+      target only for `Contratado` (expected — only contracted loans have performance),
+      rising vintage default rate
+- [x] Draft open questions for the client (target window, was score_klavi_2 already
+      in the current policy, feature coverage gap)
 - [ ] **1.1 Cleaning**: sentinels → NaN, dtype fixes (dates, SAFRA), dedup/point-in-time
       snapshot rule (latest `REFERENCIA ≤ DATA`), one-row-per-application modeling table
       written to `data/interim/`

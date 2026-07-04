@@ -11,12 +11,12 @@ One section per notebook. Updated as the analysis progresses.
 ### Data structure
 
 - File names are misleading: `profile_case_credit.parquet` holds **performance/target data** (`SAFRA`, `OVER30M2`, `STATUS`); `transactions_case_credit.parquet` holds **application features** (Klavi scores, demographics, income).
-- **Neither table is unique on `uuid`**: perf = 220,618 rows / 184,009 uuids (repeat applications); feat = 371,596 rows / 96,196 uuids (~3.9 feature snapshots per person, keyed by `REFERENCIA`).
-- A naive join explodes to **1.38M rows** → a point-in-time snapshot rule (latest `REFERENCIA ≤ DATA`) is required to build the modeling table without leakage.
+- **Business key is `uuid` + application date**: `uuid` + `DATA` in perf (220,618 rows / 184,009 uuids — repeat applications); `uuid` + `REFERENCIA` in feat (371,596 rows / 96,196 uuids — multiple snapshots per person). Both tables are unique on this key.
+- A join on `uuid` alone explodes to **1.38M rows** → a point-in-time snapshot rule (latest `REFERENCIA ≤ DATA`) is required to build the modeling table without leakage.
 
 ### Target & selection bias
 
-- `OVER30M2` exists **only for `STATUS = Contratado`** — 24,148 rows, **10.30% default rate**. `Aprovado` (77k) and `Reprovado` (119k) have no performance → **reject-inference / selection-bias** problem for any model trained on contracted clients.
+- `OVER30M2` exists **only for `STATUS = Contratado`** — 24,148 rows, **10.30% default rate**. Expected: only contracted loans have observable performance. Still, `Aprovado` (77k) and `Reprovado` (119k) without performance → **reject-inference / selection-bias** caveat for any model trained on contracted clients.
 - Default rate **rises across vintages**: ~8–10% (2024) → ~12.5% (202506). Either real deterioration or immature performance in recent safras — pending client confirmation of the observation window.
 
 ### Coverage & data quality
@@ -29,9 +29,8 @@ One section per notebook. Updated as the analysis progresses.
 ### Open questions for the client
 
 1. Exact definition/observation window of `OVER30M2`; is performance mature for safras 202505–202506?
-2. What distinguishes `Aprovado` from `Contratado`? Was `score_klavi_2` already used in the current policy?
+2. Was `score_klavi_2` already used in the current policy (would explain part of the selection bias)?
 3. Why do 47.7% of applications lack Klavi features (consent funnel, integration date, extraction issue)?
-4. Which `REFERENCIA` snapshot is available at decision time?
 
 ---
 
