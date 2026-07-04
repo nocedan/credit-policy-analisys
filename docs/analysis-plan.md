@@ -54,6 +54,7 @@ business team — all with a visual, insight-driven approach.
 
 ## Phase 4 — Validation
 
+- [ ] **What are the key factors or criteria you would consider essential to ensure the insights are relevant, accurate, and representative.**
 - [ ] **Out-of-time validation**: train on early safras, validate on the most recent
       mature ones (never random splits only)
 - [ ] Discuss selection bias explicitly: performance only observed for `Contratado`;
@@ -67,5 +68,6 @@ business team — all with a visual, insight-driven approach.
 
 - [ ] Executive summary with visuals: what drives default, proposed policy,
       expected impact, caveats and open questions
+- [ ] Please detail: the main steps you would take to explore, clean, and organize the provided dataset; key factors or criteria you would consider essential to ensure the insights are relevant, accurate, and representative; how you would validate both the analytical approach and the insights generated;
 - [ ] Final recommendation on how to proceed with Klavi's variables
       (which to use now, which need better coverage, what to instrument next)
