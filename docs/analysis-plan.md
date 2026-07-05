@@ -37,9 +37,6 @@ business team — all with a visual, insight-driven approach.
       `Capacidade Financeira` as valid (flag extremes only), left join on `uuid` +
       application date (`REFERENCIA` = `DATA`) to one row per application (all STATUS),
       coverage/segment flags, key uniqueness asserted, written to `data/interim/`
-- [x] **1.2 Sanity-check the interim table**: row counts reconcile with raw, no future
-      information (`REFERENCIA` = `DATA` re-check / leakage), default rate per safra
-      unchanged by cleaning
 
 ## Phase 2 — Feature analysis (relevance & representativeness)
 
