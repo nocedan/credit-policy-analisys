@@ -23,17 +23,23 @@ business team — all with a visual, insight-driven approach.
 - [x] **1.0 Initial exploration**: schemas, grain/keys, join coverage, target definition,
       missingness, sentinel values, feature distributions, directional features-vs-target look
 - [x] Resolve grain: business key is `uuid` + application date (`DATA` / `REFERENCIA`),
-      unique in both tables; join on `uuid` alone explodes and must not be used
-- [x] Identify structural issues: -999999 sentinels, structural missingness,
-      target only for `Contratado` (expected — only contracted loans have performance),
-      rising vintage default rate
-- [x] Draft open questions for the client (target window, was score_klavi_2 already
-      in the current policy, feature coverage gap)
-- [ ] **1.1 Cleaning**: sentinels → NaN, dtype fixes (dates, SAFRA), dedup/point-in-time
-      snapshot rule (latest `REFERENCIA ≤ DATA`), one-row-per-application modeling table
-      written to `data/interim/`
-- [ ] Sanity-check the cleaned table: row counts reconcile with raw, no future information
-      (leakage check), default rate per safra unchanged by cleaning
+      unique in both tables;
+- [x] Identify structural issues: -999999 sentinels, negative `Capacidade Financeira`
+      extremes, two-tier coverage (broad vs open-finance-gated variables), target only
+      for `Contratado` (expected — only contracted loans have performance), rising
+      vintage default rate
+- [x] Prototyped in memory in 1.0 (1.1 productionizes, does not re-derive): dtype casts
+      at load (`DATA`/`REFERENCIA` → datetime, `SAFRA` → int, `risco_aposta` → categorical)
+      and the application-date join (`REFERENCIA` = `DATA`, simple left join — snapshots
+      are application-triggered; verified equivalent to a point-in-time asof rule)
+- [x] **1.1 Build interim application table**: re-apply dtype casts, sentinels → NaN
+      (`score_klavi_1` -999999, `status_empregaticio` '-999999'), keep negative
+      `Capacidade Financeira` as valid (flag extremes only), left join on `uuid` +
+      application date (`REFERENCIA` = `DATA`) to one row per application (all STATUS),
+      coverage/segment flags, key uniqueness asserted, written to `data/interim/`
+- [x] **1.2 Sanity-check the interim table**: row counts reconcile with raw, no future
+      information (`REFERENCIA` = `DATA` re-check / leakage), default rate per safra
+      unchanged by cleaning
 
 ## Phase 2 — Feature analysis (relevance & representativeness)
 
