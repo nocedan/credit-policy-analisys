@@ -10,7 +10,28 @@ business team — all with a visual, insight-driven approach.
 (`data/raw` → `data/interim` → `data/processed`); takeaways per notebook in
 [reports/key_takeaways.md](../reports/key_takeaways.md).
 
+# O Problema
+O cliente da Klavi quer revisar sua política de concessão de cŕedito. Default rate rises from ~8–10% (2024) to 12.5% (202506) while the approval rate falls from ~54% to ~40% — policy tightened as risk worsened.
+
+# Abordagem:
+Quais são as dimensões relevantes do problema? Para cada variável, é importante:
+
+A. ter uma clareza da sua distribuição. Talvez verificar a distribuição com a quebra contratado/não contratado.
+B. non-missing count (coverage),
+C. e da sua relação com o target (IV/WOE). Variáveis com baixa cobertura terão IV naturalmente menores.
+D. É de nossa opção, buscar estratégia de binning que seja estável no tempo e que garanta ordenação.
+E. A relevância da variável para revisão da política de crédito é definida pelo IV (discriminação + coverage) e pelo seu papel (vai atuar dentro das aplicações aprovadas ou negadas).
+F. A correlação após o binning deve ser calculada para evitar redundancia na proposta final.
+G. Estruturação de nova política de crédito baseada na análise da discriminação das variáveis dentro e fora das aprovadas.
+** Ou seja, se a variável possui boa descriminação dentro das aprovadas e tem boa cobertura nas negadas, pode representar oportunidade de ampliar a concessão.
+De qualquer forma, uma política de abertura deve ser conservadora por conta de que
+de 202501 em diante o default rate aumenta com inclinação consistente.
+
+H. Refletir sobre estrutura final do uso das variáveis. Score? Lasso?
+
 ---
+
+# Step by step
 
 ## Phase 0 — Setup
 
