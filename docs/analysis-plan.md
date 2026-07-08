@@ -48,12 +48,14 @@ seguida, **da variável para a política**.
 
 **Da variável à política**
 
-7. **Nova política** — estruturar a concessão a partir da discriminação das variáveis dentro e
-   fora das aprovadas.
+7. **Nova política** — estruturar a concessão a partir da discriminação das variáveis dentro das contratadas, extrapolando o comportamento para as aprovadas (sem contratação) e reprovadas.
    - Boa discriminação dentro das aprovadas + boa cobertura nas negadas → oportunidade de
-     ampliar a concessão.
+     ampliar a concessão ou reduzir inadimplência.
    - Ainda assim, a abertura deve ser conservadora: de 202501 em diante o default rate cresce
      com inclinação consistente.
+   - Garantir estabilidade temporal das features e binning utilizadas na nova política.
+   - Garantir segurança para tomada de decisão a partir do viés de seleção na amostra de treino (vs inferência).
+
 8. **Forma final** — como combinar as variáveis? Score? Lasso?
 
 ---
@@ -85,6 +87,12 @@ seguida, **da variável para a política**.
       negativa como válida (apenas sinalizar os extremos), left join em `uuid` +
       data da aplicação (`REFERENCIA` = `DATA`) para uma linha por aplicação (todos os STATUS),
       flags de coverage/segmento, unicidade da chave assertada, escrito em `data/interim/`
+- [x] **1.2 Multiplicidade & grain**: investigadas as repetições intra-mês (mesmo `uuid`, mesmo
+      `SAFRA`, datas distintas) — sem `contract_id`/valor para provar equivalência, e `Contratado`
+      mostra 88 grupos de contratos distintos (todos em datas diferentes, 7 com `OVER30M2`
+      divergente). Deduplicar por prioridade de STATUS recuperaria ~0 snapshot (a disponibilidade
+      segue o `uuid`, não a linha). **Decisão: manter o grain `(uuid, DATA)`** (1.1 inalterado); a
+      sobre-representação por usuário em IV/WoE vira decisão de ponderação na Fase 2.
 
 ## Fase 2 — Análise de variáveis (relevância e representatividade)
 
