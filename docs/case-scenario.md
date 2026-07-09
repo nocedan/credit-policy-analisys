@@ -19,29 +19,56 @@
 
 ---
 
-## Respostas — variáveis relevantes e candidatas à política
+## Respostas — variáveis, política e proposta (análise concluída)
 
-As duas primeiras perguntas do caso já estão respondidas pela Fase 2 (ver
-[analysis-plan.md](analysis-plan.md)). **São perguntas distintas**, e os dados divergem
-exatamente onde importa. Todos os números abaixo vêm da amostra rotulada `Contratado` — a única
-com target (`OVER30M2`) observável.
+**Por que agora.** A inadimplência (`OVER30M2`) subiu de ~8–10% (safras de 2024) para 12,5%
+(jun/2025) enquanto o approval rate caiu de ~54% para ~40%: a régua foi apertada e, ainda assim, o
+default piorou. O problema não é *aprovar menos* — é *aprovar melhor*.
 
-**Q1 — quais variáveis são mais relevantes para prever default** (ranking IV, notebook 2.1 §2):
-sinal modesto em toda a linha (nenhuma variável ≥ 0,1; nada em território de leakage).
-`classe_social` lidera (IV 0,091); o trio open-finance (`score_klavi_1`, `Renda`, `risco_aposta`)
-fica ≈ 0 **por causa** dos 95,5% de missing — não por fraqueza intrínseca da variável.
+**Como ler os números.** Tudo que é *medido* vem da amostra rotulada — os 24.148 `Contratados`
+(10,3% de default), a única com performance observável. `Aprovado`/`Reprovado` não têm target; a
+proposta trata esse ponto de frente (item Q3, "expansão com segurança").
 
-**Q2 — quais variáveis são boas candidatas a uma política prática (regras + score)** (shortlist
-validado): `classe_social`, `Capacidade Financeira`, `score_klavi_2` (flag *watch*) e
-`status_empregaticio` — aprovadas em coverage, redundância, estabilidade/PSI, leakage e
-ponderação.
+**Q1 — Quais variáveis são mais relevantes para prever default?**
+*Não há bala de prata.* Nenhuma variável isolada discrimina fortemente — `classe_social` lidera,
+mas modestamente, seguida de perto por `Capacidade Financeira`, `score_klavi_2` e
+`status_empregaticio`. O trio open-finance (`score_klavi_1`, `Renda`, `risco_aposta`) é inutilizável
+não por fraqueza, mas porque **falta em 95,5% dos pedidos**. *Implicação:* a política precisa
+**combinar variáveis complementares**, não depender de um único score. (Ranking IV: `classe_social`
+0,091 > `Capacidade Financeira` 0,067 > `score_klavi_2` 0,037 > `status_empregaticio` 0,031 >
+`regiao` 0,025.)
 
-**Q1 ≠ Q2**, e a diferença é ela própria um achado:
+**Q2 — Quais são boas candidatas a uma política prática (regras + score)?**
+Quatro variáveis, todas validadas (não-redundantes, estáveis no tempo, sem leakage, robustas a
+reaplicações): **`classe_social`, `Capacidade Financeira`, `score_klavi_2` e `status_empregaticio`**.
+Duas ressalvas que são, elas próprias, decisões: `score_klavi_2` entra **sob observação** (menos
+estável no tempo); `regiao`, embora relevante (Q1), é **excluída por fairness** — proxy de atributos
+protegidos, risco de redlining.
 
-- `regiao` — 2ª por IV (0,025), logo *tem* relevância (Q1), mas **não** é candidata (Q2):
-  excluída por fairness (proxy de atributos protegidos / risco de redlining).
-- trio open-finance — falha Q1 **apenas por coverage**, não por mérito da variável.
+**Q3 — Como transformar isso numa proposta objetiva e justificável para o negócio?**
+Uma política de **dois níveis**, simples de explicar e auditar:
 
-**Caveat central.** `Aprovado` e `Reprovado` **não têm target** — não há como observar se uma
-variável discrimina *dentro* desses grupos. Como extrapolar com segurança a discriminação medida
-nas `Contratadas` para os demais STATUS é uma **questão da Fase 3**, não algo mensurável agora.
+1. **Segmentar** pelo bloco socioeconômico estável — `classe_social` × `status_empregaticio`. É a
+   parte *estável* do risco (a ordenação A/B/C > D/E se sustenta em 74 de 78 janelas mensais).
+2. **Cortar por score** dentro de cada segmento (`score_klavi_2`). O score ordena o risco de ponta a
+   ponta *dentro* de cada célula (no D/E mais arriscado, o corte separa 21% de 6% de default) — mais
+   preciso e mais justo do que negar uma célula inteira.
+
+- **Impacto (medido no book):** ao **mesmo nível de aprovação (~90%)**, o default cai de **10,3% para
+  9,64%**; a fatia recusada inadimple a 16,3%. A política corrige distorções da régua atual — hoje a
+  célula mais segura (`A/B/C·Formal`, 6,5%) é aprovada *menos* que células mais arriscadas.
+- **Onde a Klavi agrega, refina; onde não, respeita o processo do cliente:** em ~metade do funil a
+  Klavi não recebe snapshot. Isso **não** significa decisão sem informação — a concessão ali segue o
+  **processo próprio do cliente** (seus dados e score), que a Klavi simplesmente não observa. A régua
+  proposta **não se sobrepõe** a esse processo: mantém a decisão atual nesse bloco e concentra o
+  refinamento onde a Klavi de fato adiciona sinal. Ampliar a cobertura Klavi (consentimento
+  snapshot/open-finance) **estende o alcance** da nova régua a esse bloco — a maior alavanca
+  estrutural de médio prazo.
+- **Justiça e governança:** `regiao` fica **fora** da régua como variável — evita proxy de atributos
+  protegidos (risco de redlining); e toda a política vive num spec versionado e editável à mão,
+  auditável ponto a ponto. Monitorar impacto díspar (por região e demais eixos protegidos) faz parte
+  da governança de rollout.
+- **Expansão com segurança (o viés de seleção, resolvido em desenho):** performance só existe nos
+  contratados, então abrir a concessão aos hoje reprovados é *hipótese*, não medição. A recomendação
+  **adota os cortes já no fluxo corrente** (efeito medido) e trata a expansão como **teste estagiado
+  e monitorado** — que, de quebra, gera os rótulos que hoje faltam.
