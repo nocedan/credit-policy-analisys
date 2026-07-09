@@ -1,0 +1,22 @@
+# Política v1 — ponto de operação escolhido no notebook 3.2 (fonte única de verdade p/ 3.3+).
+# Por segmento: score_min (null = sem gate; .inf = nega os com-score) e o caminho dos sem-score.
+# Cutoffs medidos no book Contratado; arredondar/recalibrar antes de produção.
+tau: 0.115
+segments:
+  A/B/C · Desconhecido:
+    score_min: null
+    scoreless: approve
+  A/B/C · Autônomo:
+    score_min: null
+    scoreless: approve
+  A/B/C · Formal:
+    score_min: null
+    scoreless: approve
+  D/E · Desconhecido:
+    score_min: 595.0
+    scoreless: deny
+  D/E · Autônomo/Formal:
+    score_min: 518.0
+    scoreless: deny
+  (missing):
+    mode: keep_current

@@ -1,0 +1,10 @@
+# Segmentações por composição de variáveis — fonte única de verdade (notebooks 3.x).
+# Cada entrada cruza as versões BINADAS (bin_spec.yaml) das `dims` numa única categórica:
+#   células "A/B/C · Formal"; (missing) em qualquer dim -> (missing).
+# `groups:` (opcional, mesmo schema das categóricas do bin_spec) FUNDE células:
+#   junte células numa mesma lista; as não listadas mantêm o próprio nome e a ordem do produto.
+# Após editar, reexecute o notebook 3.0 para revisar.
+segmento:
+  dims: [classe_social, status_empregaticio]
+  groups:
+    D/E · Autônomo/Formal: [D/E · Autônomo, D/E · Formal]  # D/E·Formal: 22 rotuladas (3.0 §4)
