@@ -162,7 +162,48 @@ seguintes.
 `score_klavi_2` (watch), `status_empregaticio` — com forma, estabilidade, redundância, leakage e
 ponderação resolvidos; `regiao` excluída por fairness. Alimenta a Fase 3.
 
-## Fase 3 — Proposta de política (regras + score)
+## Fase 3 — Proposta de política (regras + score) — *rascunho*
 
-- [ ] Definir como extrapolar com segurança a discriminação medida nas `Contratadas` para os
-      demais STATUS (`Aprovado`, `Reprovado`) — nenhum deles tem target observável.
+**Desenho**: **segmento** = `classe_social` × `status_empregaticio` (2 × 3 + `(missing)`), com um
+**cutoff de `score_klavi_2` por segmento**. `Capacidade Financeira` fica fora do v1 (candidata a 2º
+eixo depois). Swap-set assimétrico: maus removíveis do book são medidos (`Contratado`); bons
+alcançáveis no estoque não-contratado são inferidos.
+
+**Variável `segmento` (habilitador — YAML/módulo paralelos; reusa binning + máquina do 2.0)**
+- [x] Novo `references/segment_spec.yaml` (paralelo ao `bin_spec.yaml`) p/ segmentações por
+      composição de variáveis — extensível a outros segmentos. Entrada única:
+      `segmento: {dims: [classe_social, status_empregaticio], groups: ...}`.
+- [x] Novo módulo `credit_policy/segments.py` (paralelo a `binning.py`): `make_segments(binned, spec)`
+      cruza as **dims já binadas** numa coluna de células (`A/B/C · Formal`, …); `(missing)` em
+      qualquer dim → `(missing)`; fusão de células via `groups:` **reusando o `apply_spec`
+      categórico** (identidade p/ células não listadas). Reusa `load_spec`.
+- [x] `binning.py` **inalterado**: um segmento cruzado é só mais uma categórica → WoE/PSI/over-time
+      o recebem sem mudança.
+
+**3.0 — Mapa de segmentos & estoque** — *notebook 3.0*
+- [x] População por `segmento` × STATUS + coverage de `score_klavi_2` por célula: **`(missing)` é
+      48,6% do funil e 49% do book**; coverage de score ~89–90% nas células nomeadas vs 1,1% no
+      `(missing)` (score e demografia co-missing) → cutoff por segmento é bem-posto exatamente nas
+      células nomeadas; o `(missing)` **é** o caminho sem-score.
+- [x] Em `Contratado`, por segmento: três tiers de risco — A/B/C 6,5–7,8%, `(missing)` 11,5%,
+      D/E 15,5–16,4% (2,4×; WoE +0,50 → −0,54).
+- [x] Visual do swap-set: estoque concentra onde o risco é menor (A/B/C: 31,6k `Aprovado` + 41,4k
+      `Reprovado`; `(missing)`: 95,3k). **A política atual desordena**: `A/B/C · Formal` (célula
+      mais segura, 6,5%) tem approval 43,7% < `A/B/C · Desconhecido` (50,1% com 7,8%).
+- [x] Colapso de células finas: `D/E · Formal` (22 rotuladas / 356 no total) fundida em
+      `D/E · Autônomo/Formal` via `groups:` do `segment_spec.yaml`.
+
+**3.1 — Risco por segmento & WoE do score** (reusa 2.0)
+- [ ] Baseline por segmento (`woe_table`/`woe_over_time`/`psi` sobre `segmento`).
+- [ ] WoE de `score_klavi_2` dentro de cada segmento; checar monotonicidade.
+- [ ] Regra do score ausente (~54%): caminho explícito para o bin `(missing)` por segmento.
+
+**3.2 — Simulação de cutoffs & trade-off**
+- [ ] Varrer cutoff contínuo de `score_klavi_2` por segmento; approval × default rate no book `Contratado`.
+- [ ] Curva de trade-off para escolha do ponto de operação; cutoff por `classe_social` como alavanca.
+- [ ] Cenário de extrapolação ao estoque não-contratado (sinalizado, não embutido no número-título).
+- [ ] Recomendar ponto de operação inicial por segmento.
+
+**3.3 — Fairness / disparate impact** (adiado da Fase 2)
+- [ ] Approval & default rate por `regiao` sob a política — confirmar ausência de impacto díspar
+      residual. Não bloqueia 3.0–3.2.
