@@ -210,27 +210,39 @@ alcançáveis no estoque não-contratado são inferidos.
       alavanca de aquisição de dados via consentimento snapshot/open-finance).
 
 **3.2 — Simulação de cutoffs & trade-off** — *notebook 3.2; política em `references/policy_v1.yaml` + `credit_policy/policy.py`*
-- [x] Cutoff contínuo por segmento (menu de conjuntos aninhados `score ≥ c`); família de políticas
-      parametrizada por uma tolerância de risco **τ** (aprova toda unidade com default medido ≤ τ).
-- [x] Curva de trade-off (fronteira): **penhasco em τ = 11,5%** — o bloco `(missing)` (49% do
-      book) entra/sai inteiro. Ramo τ = 10% (40% do book a 7,3%) precifica a **alavanca de
-      aquisição de dados**. Alavanca por `classe_social` emerge dos dados: A/B/C sem gate de
-      score; D/E com cutoffs reais (≥ 595 / ≥ 518) e sem-score negado.
-- [x] Cenário de extrapolação **sinalizado** (não é número-título): regras admitiriam 90,8% do
-      estoque `Aprovado` (demanda) e 84,6% do `Reprovado` a ~9,7% *assumido* — expansão em
-      `Reprovado` só via teste estagiado e monitorado (que também gera os labels que faltam).
-- [x] Ponto de operação recomendado: **τ\\* = 11,5%** → mantém 90% do book a **9,64% vs 10,30%**
-      (o que sai defaulta a 16,3%); persistido em `references/policy_v1.yaml`, aplicado por
-      `credit_policy.policy.approve` (fonte única p/ 3.3+).
+- [x] Cutoff contínuo por segmento nomeado (menu de conjuntos aninhados `score ≥ c`); família de
+      políticas parametrizada por uma tolerância de risco **τ** (aprova toda unidade com default
+      medido ≤ τ).
+- [x] **`(missing)` fora do sweep de τ, por desenho** — sem score nem demografia, não há o que
+      cortar. Em vez de aprovar tudo (extrapolação com zero variável observada) ou negar tudo, a
+      regra é `mode: keep_current`: **preserva a decisão já tomada pelo cliente** (aprova
+      `STATUS ∈ {Aprovado, Contratado}`, nega `Reprovado`) — assume-se que existe um processo do
+      cliente fora das nossas 4 variáveis, mantido em vigor. Como todo o book rotulado
+      `(missing)` é `Contratado`, o bloco vira um **piso fixo** (49% do book, 11,5% descritivo,
+      não decisório) presente em qualquer τ — o "penhasco" da versão anterior desaparece.
+- [x] Curva de trade-off: **não-monotônica** — cai antes de subir (τ baixo dilui o piso de 11,5%
+      com fatias mínimas e seguras dos nomeados; τ maior traz volume maior e mais arriscado,
+      inclusive D/E, puxando de volta para 10,3%). Alavanca por `classe_social` emerge dos dados:
+      A/B/C sem gate de score; D/E com cutoffs reais (≥ 595 / ≥ 518) e sem-score negado.
+- [x] Ponto de operação recomendado: **τ\\* = 11,5%** (nos nomeados) → mantém 90% do book a
+      **9,64% vs 10,30%** (o que sai defaulta a 16,3%); persistido em `references/policy_v1.yaml`,
+      aplicado por `credit_policy.policy.approve` (fonte única p/ 3.3+).
+- [x] Cenário de extrapolação **sinalizado e agora delimitado**: nos segmentos nomeados (única
+      hipótese real, apoiada em segmento+score), as regras admitiriam **36,1% do `Reprovado`**
+      (43,1k de 119,2k) a ~7,4% assumido, e 42,2% do `Aprovado` nomeado (32,6k) — expansão só via
+      teste estagiado e monitorado. No `(missing)`, **nenhuma hipótese é pedida**: os 57,8k
+      `Reprovado` seguem negados (status quo do cliente), e os 37,5k `Aprovado` seguem aprovados
+      sem reavaliação — nem extrapolação nem negação nova, apenas preservação.
 
 **3.3 — Fairness / disparate impact** (adiado da Fase 2) — *notebook 3.3*
 - [x] Approval por `regiao` (atual vs `policy_v1` simulada, população com região ~52%): **sem
-      impacto díspar residual** — four-fifths passa e *melhora* (0,832 → 0,932); diferenças
+      impacto díspar residual** — four-fifths passa e *melhora* (0,832 → 0,931); diferenças
       remanescentes acompanham o risco medido por região (Nordeste 11,2% vs Sul 6,2%), não a
       região em si. Reavaliar com aprovações realizadas quando a política/teste entrar em vigor.
 
 **Saída da fase**: política v1 completa e justificável — segmentação persistida (3.0), baseline e
 eixo de score validados + regra do sem-score (3.1), fronteira de trade-off com ponto de operação
-em `policy_v1.yaml` (3.2) e checagem de fairness aprovada (3.3). Expansão ao estoque `Reprovado`
-permanece hipótese a testar de forma estagiada; conversão do `(missing)` em células nomeadas é a
-maior alavanca estrutural.
+em `policy_v1.yaml` e o bloco `(missing)` deferido ao status quo do cliente (3.2), checagem de
+fairness aprovada (3.3). Expansão ao estoque `Reprovado` permanece hipótese a testar de forma
+estagiada, restrita aos segmentos nomeados onde há evidência; `(missing)` não é objeto de
+hipótese — conversão em células nomeadas (mais dados) é a maior alavanca estrutural futura.

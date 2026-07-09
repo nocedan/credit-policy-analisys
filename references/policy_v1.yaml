@@ -19,5 +19,4 @@ segments:
     score_min: 518.0
     scoreless: deny
   (missing):
-    score_min: null
-    scoreless: approve
+    mode: keep_current
