@@ -42,17 +42,17 @@ seguida, **da variável para a política**.
 2. **Coverage** — non-missing count; variáveis com baixa cobertura terão IV naturalmente menor.
 3. **Relação com o target** — IV / WoE.
 4. **Binning** — estratégia estável no tempo e que garanta ordenação (monotonicidade).
-5. **Relevância** — definida pelo IV (discriminação + coverage) e pelo papel da variável (se
-   atua dentro das aplicações aprovadas ou das negadas).
+5. **Relevância** — definida pelo IV (discriminação + coverage).
 6. **Redundância** — correlação pós-binning entre candidatas, para não repetir sinal na proposta final.
 
 **Da variável à política**
 
-7. **Nova política** — estruturar a concessão a partir da discriminação das variáveis dentro das contratadas, extrapolando o comportamento para as aprovadas (sem contratação) e reprovadas.
-   - Boa discriminação dentro das aprovadas + boa cobertura nas negadas → oportunidade de
-     ampliar a concessão ou reduzir inadimplência.
-   - Ainda assim, a abertura deve ser conservadora: de 202501 em diante o default rate cresce
-     com inclinação consistente.
+7. **Nova política** — estruturar a concessão a partir da discriminação das variáveis. Essa
+   discriminação só é **mensurável dentro das `Contratadas`** (única amostra com target); como
+   extrapolá-la com segurança para `Aprovado` e `Reprovado` — que não têm target — é o problema
+   central da Fase 3, não algo observável agora.
+   - A abertura deve ser conservadora: de 202501 em diante o default rate cresce com inclinação
+     consistente.
    - Garantir estabilidade temporal das features e binning utilizadas na nova política.
    - Garantir segurança para tomada de decisão a partir do viés de seleção na amostra de treino (vs inferência).
 
@@ -131,7 +131,7 @@ seguintes.
       `Desconhecido`; `Capacidade Financeira` e `score_klavi_2` recortados para menos bins,
       monótonos e estáveis.
 
-**5. Relevância — IV + papel da variável** — *ranking/shortlist 2.1 §2; estabilidade WoE 2.0 §6; PSI/IV 2.2 §3*
+**5. Relevância — IV** — *ranking/shortlist 2.1 §2; estabilidade WoE 2.0 §6; PSI/IV 2.2 §3*
 - [x] Ranking IV = discriminação × coverage (2.1 §2): sinal modesto em toda a linha (nenhuma
       variável ≥ 0,1; nada em território de leakage > 0,5). `classe_social` 0,091 lidera; trio
       open-finance ≈ 0 por causa dos 95,5% de missing.
@@ -144,8 +144,6 @@ seguintes.
 - [x] **PSI** por variável ao longo de SAFRA e **IV por vintage** (2.2 §3): três estáveis
       (PSI < 0,03); `score_klavi_2` com PSI 0,32 numa safra e IV volátil (0,01–0,18) → mantida com
       flag **"watch"** (revisitar bins/recência na Fase 3).
-- [ ] **Papel da variável** (Abordagem ponto 5): registrar, por candidata, se discrimina dentro
-      das aprovadas ou das negadas — insumo direto para a extrapolação da Fase 3.
 
 **6. Redundância** — *2.2 §2*
 - [x] Correlação pós-binning (WoE) entre as candidatas, com correção de co-missingness (matriz
@@ -166,12 +164,5 @@ ponderação resolvidos; `regiao` excluída por fairness. Alimenta a Fase 3.
 
 ## Fase 3 — Proposta de política (regras + score)
 
-- [ ] **3.0 Desenho da política candidata**: regras simples e explicáveis (cutoffs em
-      variáveis de ampla coverage) + ranking baseado em score para a faixa intermediária
-- [ ] Análise de swap-set vs. política atual (mudanças de aprovação/recusa e seu impacto
-      esperado no default)
-- [ ] Curva de trade-off approval rate × default rate esperados para o time de negócio
-      escolher o ponto de operação
-- [ ] **Fairness / disparate impact** (adiado da Fase 2): medir approval e default rate por
-      `regiao` (e outros eixos protegidos disponíveis) sob o scorecard proposto — confirmar que
-      excluir `regiao` como feature não deixa impacto díspar residual
+- [ ] Definir como extrapolar com segurança a discriminação medida nas `Contratadas` para os
+      demais STATUS (`Aprovado`, `Reprovado`) — nenhum deles tem target observável.
