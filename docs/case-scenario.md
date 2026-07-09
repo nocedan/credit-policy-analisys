@@ -52,7 +52,8 @@ Uma política de **dois níveis**, simples de explicar e auditar:
    parte *estável* do risco (a ordenação A/B/C > D/E se sustenta em 74 de 78 janelas mensais).
 2. **Cortar por score** dentro de cada segmento (`score_klavi_2`). O score ordena o risco de ponta a
    ponta *dentro* de cada célula (no D/E mais arriscado, o corte separa 21% de 6% de default) — mais
-   preciso e mais justo do que negar uma célula inteira.
+   preciso e mais justo do que negar uma célula inteira. *(A v1 usa um único eixo de score,
+   transparente; `Capacidade Financeira` — a 4ª candidata — fica reservada como 2º eixo numa v2.)*
 
 - **Impacto (medido no book):** ao **mesmo nível de aprovação (~90%)**, o default cai de **10,3% para
   9,64%**; a fatia recusada inadimple a 16,3%. A política corrige distorções da régua atual — hoje a
@@ -66,8 +67,7 @@ Uma política de **dois níveis**, simples de explicar e auditar:
   estrutural de médio prazo.
 - **Justiça e governança:** `regiao` fica **fora** da régua como variável — evita proxy de atributos
   protegidos (risco de redlining); e toda a política vive num spec versionado e editável à mão,
-  auditável ponto a ponto. Monitorar impacto díspar (por região e demais eixos protegidos) faz parte
-  da governança de rollout.
+  auditável ponto a ponto.
 - **Expansão com segurança (o viés de seleção, resolvido em desenho):** performance só existe nos
   contratados, então abrir a concessão aos hoje reprovados é *hipótese*, não medição. A recomendação
   **adota os cortes já no fluxo corrente** (efeito medido) e trata a expansão como **teste estagiado
