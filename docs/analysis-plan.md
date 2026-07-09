@@ -96,15 +96,73 @@ seguida, **da variável para a política**.
 
 ## Fase 2 — Análise de variáveis (relevância e representatividade)
 
-- [ ] **2.0 Sinal univariado**: IV / WoE por variável (binned), default rate por decil,
-      gráficos de separação (KDE/ROC por variável)
-- [ ] Estratégia de missing-data: tratar "sem dados Klavi" (47,7%) e "sem consentimento
-      open-finance" (91,3% para score_klavi_1/Renda/risco_aposta) como segmentos explícitos,
-      não apenas NaN
-- [ ] **Estabilidade**: PSI de cada variável ao longo de SAFRA; estabilidade do sinal (IV por vintage)
-- [ ] Correlação / redundância entre candidatas (ex.: score_klavi_2 × Capacidade Financeira)
-- [ ] Triagem de leakage: qualquer variável suspeitosamente preditiva → questionar sua
-      disponibilidade point-in-time
+A fase avança **variável a variável** seguindo os pontos 2→6 da Abordagem, sobre a amostra
+rotulada `Contratado` — o **caveat de viés de seleção vale para todo número aqui**. A
+distribuição (ponto 1) já foi coberta em 1.0 §6; a passagem da variável para a política (pontos
+7–8) é a Fase 3. O trabalho se divide entre **2.0 — binning workbench** (estima, persiste e
+ajusta à mão os bins), **2.1 — univariate signal** (coverage, ranking IV, shortlist) e **2.2 —
+shortlist validation** (redundância, estabilidade, leakage, ponderação); a máquina WoE/IV vem do
+módulo `src/credit_policy/` (`woe.py`, `binning.py`), os bins de `references/bin_spec.yaml` e o
+shortlist de `credit_policy.VAR_SELECTION` — fontes únicas de verdade para 2.0/2.1/2.2 e notebooks
+seguintes.
+
+**2. Coverage (representatividade)** — *2.1 §1*
+- [x] Contagem non-missing + % da amostra rotulada por variável; três camadas: flags 100%,
+      amplas ~46–52% (`score_klavi_2`, `Capacidade Financeira`, categóricas), trio open-finance
+      ~4,5% (`score_klavi_1`, `Renda`, `risco_aposta`).
+- [x] Missing como **segmento explícito**, não só NaN: bin `(missing)` em toda variável + flags
+      `has_snapshot` / `has_open_finance` como variáveis binárias — isola "a disponibilidade em
+      si é preditiva?".
+- [x] Cobertura simétrica entre STATUS (1.0 §3 / O Problema) → o viés está no label, não na
+      disponibilidade; a cobertura é representativa da população through-the-door.
+
+**3. Relação com o target — IV / WoE** — *módulo `credit_policy.woe`; demo 2.1 §2; perfis 2.0 §4*
+- [x] Máquina WoE/IV (`WoE = ln(%goods/%bads)`, positivo = mais seguro; suavização 0,5); IV
+      sobre bins ocupados, incluindo `(missing)` — agora em `src/credit_policy/woe.py`.
+- [x] Bad rate e WoE por bin; perfis de forma do risco ("WoE geral", 2.0 §4).
+
+**4. Binning** — *2.0 (binning workbench)*
+- [x] Estimativa inicial por quantis (`estimate_spec`: `n_bins = clip(n_nonmiss//200, 2, 10)`,
+      cortes internos; categóricas: 1 grupo/categoria, raras (<2%) → `(outros)`), **persistida em
+      `references/bin_spec.yaml`** (esquema de cut-points, editável à mão).
+- [x] **Ordenação / monotonicidade + estabilidade** (Abordagem ponto 4): bins fundidos à mão no
+      `bin_spec.yaml` via WoE geral (2.0 §5) + WoE por safra (2.0 §6), com tabela WoE por bin em
+      2.0 §4 — `classe_social` → A/B/C vs D/E; `status_empregaticio` → `Desempregado` dobrado em
+      `Desconhecido`; `Capacidade Financeira` e `score_klavi_2` recortados para menos bins,
+      monótonos e estáveis.
+
+**5. Relevância — IV + papel da variável** — *ranking/shortlist 2.1 §2; estabilidade WoE 2.0 §6; PSI/IV 2.2 §3*
+- [x] Ranking IV = discriminação × coverage (2.1 §2): sinal modesto em toda a linha (nenhuma
+      variável ≥ 0,1; nada em território de leakage > 0,5). `classe_social` 0,091 lidera; trio
+      open-finance ≈ 0 por causa dos 95,5% de missing.
+- [x] Shortlist `VAR_SELECTION` (congelada em `credit_policy.VAR_SELECTION`): `classe_social`,
+      `Capacidade Financeira`, `score_klavi_2`, `status_empregaticio`. **`regiao` (próxima por IV,
+      0,025) excluída por fairness** — região é proxy de atributos protegidos (risco de redlining /
+      disparate impact); o teste de disparate impact fica para a Fase 3 (precisa do scorecard).
+- [x] Estabilidade do sinal (visual): WoE por bin ao longo de SAFRA (2.0 §6) —
+      `classe_social` a mais estável; separação de `score_klavi_2` comprime a partir de 202503.
+- [x] **PSI** por variável ao longo de SAFRA e **IV por vintage** (2.2 §3): três estáveis
+      (PSI < 0,03); `score_klavi_2` com PSI 0,32 numa safra e IV volátil (0,01–0,18) → mantida com
+      flag **"watch"** (revisitar bins/recência na Fase 3).
+- [ ] **Papel da variável** (Abordagem ponto 5): registrar, por candidata, se discrimina dentro
+      das aprovadas ou das negadas — insumo direto para a extrapolação da Fase 3.
+
+**6. Redundância** — *2.2 §2*
+- [x] Correlação pós-binning (WoE) entre as candidatas, com correção de co-missingness (matriz
+      *overlap-only* vs *naive*): todos os pares |r| < 0,4 (máx. `classe_social` × `Capacidade
+      Financeira` 0,39) → **sem redundância, mantém as quatro**. Bloco socioeconômico
+      (`classe_social`, `status_empregaticio`) + bloco financeiro (`Capacidade Financeira`,
+      `score_klavi_2`), complementares.
+
+**Transversal**
+- [x] **Triagem de leakage** (2.2 §4): nada perto de leakage (todos IV < 0,1, |WoE| < 1);
+      features são snapshots Klavi na data da aplicação (point-in-time por construção) → passa.
+- [x] **Sensibilidade de ponderação** (2.2 §5, herdado do 1.2): um-registro-por-`uuid` derruba só
+      849 de 24.148 linhas; IV muda < 0,001 e o ranking não se altera → shortlist robusto.
+
+**Saída da fase**: shortlist final validado — `classe_social`, `Capacidade Financeira`,
+`score_klavi_2` (watch), `status_empregaticio` — com forma, estabilidade, redundância, leakage e
+ponderação resolvidos; `regiao` excluída por fairness. Alimenta a Fase 3.
 
 ## Fase 3 — Proposta de política (regras + score)
 
@@ -114,3 +172,6 @@ seguida, **da variável para a política**.
       esperado no default)
 - [ ] Curva de trade-off approval rate × default rate esperados para o time de negócio
       escolher o ponto de operação
+- [ ] **Fairness / disparate impact** (adiado da Fase 2): medir approval e default rate por
+      `regiao` (e outros eixos protegidos disponíveis) sob o scorecard proposto — confirmar que
+      excluir `regiao` como feature não deixa impacto díspar residual

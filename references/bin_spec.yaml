@@ -1,0 +1,48 @@
+# Binning das variáveis para WoE/IV — fonte única de verdade (notebooks 2.0, 2.1, e diante).
+# Para FUNDIR dois bins adjacentes:
+#   - numérica  : apague um valor da lista `cuts`  (N cuts -> N+1 bins)
+#   - categórica: junte duas categorias numa mesma lista em `groups`
+#                 (a ordem dos grupos define a ordem no gráfico)
+# (missing) [NaN] e (outros) [categorias não listadas] são bins implícitos.
+# Após editar, reexecute as células de load+plot do notebook 2.0 para revisar.
+score_klavi_1:
+  type: numeric
+  cuts: [48, 60, 70]
+score_klavi_2:
+  type: numeric
+  cuts: [484, 516, 603]
+Renda:
+  type: numeric
+  cuts: [1383, 1905, 2397, 3272]
+Capacidade Financeira:
+  type: numeric
+  cuts: [0, 955, 1457]
+classe_social:
+  type: categorical
+  groups:
+    A/B/C: [A, B, C]
+    D/E: [D/E]
+status_empregaticio:
+  type: categorical
+  groups:
+    Desconhecido: [Desconhecido, Desempregado]
+    Autônomo: [Autônomo]
+    Formal: [Formal]
+regiao:
+  type: categorical
+  groups:
+    Sudeste: [Sudeste]
+    Nordeste: [Nordeste]
+    Centro-Oeste: [Centro-Oeste]
+    Norte: [Norte]
+    Sul: [Sul]
+risco_aposta:
+  type: categorical
+  groups:
+    '0': ['0']
+    '1': ['1']
+    '3': ['3']
+    '5': ['5']
+    '2': ['2']
+    '10': ['10']
+    '8': ['8']

@@ -1,6 +1,7 @@
 # Information Value (IV) & Weight of Evidence (WoE)
 
-Reference for the univariate signal analysis (notebook 2.0). In this project, "bad" means
+Reference for the univariate signal analysis (notebooks 2.0 binning workbench & 2.1 univariate
+signal; machinery in `src/credit_policy/`). In this project, "bad" means
 `OVER30M2 = 1` and "good" means `OVER30M2 = 0`, always on the labeled `Contratado` sample.
 
 ## What IV is
