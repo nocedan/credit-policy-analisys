@@ -2,6 +2,11 @@
 
 One section per notebook. Persisted here on request once each notebook is finished.
 
+**Disclaimer**: this content is sourced from the notebooks' own conclusions, but from here on it
+is a working draft — user and assistant will edit it by hand to compose a slide presentation for
+the business team. Expect rewording, trimming, and reordering that diverge from the notebooks'
+exact phrasing/numbers as that editing progresses.
+
 ## 1.0 — Initial Data Exploration
 
 - Misleading file names: `profile_*` holds **performance**, `transactions_*` holds **application
