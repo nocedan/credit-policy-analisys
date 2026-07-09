@@ -162,7 +162,7 @@ seguintes.
 `score_klavi_2` (watch), `status_empregaticio` — com forma, estabilidade, redundância, leakage e
 ponderação resolvidos; `regiao` excluída por fairness. Alimenta a Fase 3.
 
-## Fase 3 — Proposta de política (regras + score) — *rascunho*
+## Fase 3 — Proposta de política (regras + score)
 
 **Desenho**: **segmento** = `classe_social` × `status_empregaticio` (2 × 3 + `(missing)`), com um
 **cutoff de `score_klavi_2` por segmento**. `Capacidade Financeira` fica fora do v1 (candidata a 2º
@@ -209,12 +209,28 @@ alcançáveis no estoque não-contratado são inferidos.
       adversa); segmento `(missing)` = célula própria a 11,5% (decisão de apetite no 3.2 +
       alavanca de aquisição de dados via consentimento snapshot/open-finance).
 
-**3.2 — Simulação de cutoffs & trade-off**
-- [ ] Varrer cutoff contínuo de `score_klavi_2` por segmento; approval × default rate no book `Contratado`.
-- [ ] Curva de trade-off para escolha do ponto de operação; cutoff por `classe_social` como alavanca.
-- [ ] Cenário de extrapolação ao estoque não-contratado (sinalizado, não embutido no número-título).
-- [ ] Recomendar ponto de operação inicial por segmento.
+**3.2 — Simulação de cutoffs & trade-off** — *notebook 3.2; política em `references/policy_v1.yaml` + `credit_policy/policy.py`*
+- [x] Cutoff contínuo por segmento (menu de conjuntos aninhados `score ≥ c`); família de políticas
+      parametrizada por uma tolerância de risco **τ** (aprova toda unidade com default medido ≤ τ).
+- [x] Curva de trade-off (fronteira): **penhasco em τ = 11,5%** — o bloco `(missing)` (49% do
+      book) entra/sai inteiro. Ramo τ = 10% (40% do book a 7,3%) precifica a **alavanca de
+      aquisição de dados**. Alavanca por `classe_social` emerge dos dados: A/B/C sem gate de
+      score; D/E com cutoffs reais (≥ 595 / ≥ 518) e sem-score negado.
+- [x] Cenário de extrapolação **sinalizado** (não é número-título): regras admitiriam 90,8% do
+      estoque `Aprovado` (demanda) e 84,6% do `Reprovado` a ~9,7% *assumido* — expansão em
+      `Reprovado` só via teste estagiado e monitorado (que também gera os labels que faltam).
+- [x] Ponto de operação recomendado: **τ\\* = 11,5%** → mantém 90% do book a **9,64% vs 10,30%**
+      (o que sai defaulta a 16,3%); persistido em `references/policy_v1.yaml`, aplicado por
+      `credit_policy.policy.approve` (fonte única p/ 3.3+).
 
-**3.3 — Fairness / disparate impact** (adiado da Fase 2)
-- [ ] Approval & default rate por `regiao` sob a política — confirmar ausência de impacto díspar
-      residual. Não bloqueia 3.0–3.2.
+**3.3 — Fairness / disparate impact** (adiado da Fase 2) — *notebook 3.3*
+- [x] Approval por `regiao` (atual vs `policy_v1` simulada, população com região ~52%): **sem
+      impacto díspar residual** — four-fifths passa e *melhora* (0,832 → 0,932); diferenças
+      remanescentes acompanham o risco medido por região (Nordeste 11,2% vs Sul 6,2%), não a
+      região em si. Reavaliar com aprovações realizadas quando a política/teste entrar em vigor.
+
+**Saída da fase**: política v1 completa e justificável — segmentação persistida (3.0), baseline e
+eixo de score validados + regra do sem-score (3.1), fronteira de trade-off com ponto de operação
+em `policy_v1.yaml` (3.2) e checagem de fairness aprovada (3.3). Expansão ao estoque `Reprovado`
+permanece hipótese a testar de forma estagiada; conversão do `(missing)` em células nomeadas é a
+maior alavanca estrutural.
