@@ -213,13 +213,13 @@ alcançáveis no estoque não-contratado são inferidos.
 - [x] Cutoff contínuo por segmento nomeado (menu de conjuntos aninhados `score ≥ c`); família de
       políticas parametrizada por uma tolerância de risco **τ** (aprova toda unidade com default
       medido ≤ τ).
-- [x] **`(missing)` fora do sweep de τ, por desenho** — sem score nem demografia, não há o que
-      cortar. Em vez de aprovar tudo (extrapolação com zero variável observada) ou negar tudo, a
-      regra é `mode: keep_current`: **preserva a decisão já tomada pelo cliente** (aprova
-      `STATUS ∈ {Aprovado, Contratado}`, nega `Reprovado`) — assume-se que existe um processo do
-      cliente fora das nossas 4 variáveis, mantido em vigor. Como todo o book rotulado
-      `(missing)` é `Contratado`, o bloco vira um **piso fixo** (49% do book, 11,5% descritivo,
-      não decisório) presente em qualquer τ — o "penhasco" da versão anterior desaparece.
+- [x] **`(missing)` fora do sweep de τ, por desenho** — é *missing para a Klavi* (sem snapshot),
+      não indecisão: o cliente já decide esse bloco com **processo próprio** (dados e score dele)
+      que a Klavi não observa. Em vez de aprovar tudo ou negar tudo, `mode: keep_current`
+      **respeita esse processo** (aprova `STATUS ∈ {Aprovado, Contratado}`, mantém `Reprovado`
+      negado) em vez de se sobrepor a ele. Como todo o book rotulado `(missing)` é `Contratado`, o
+      bloco vira um **piso fixo** (49% do book, 11,5% descritivo, não decisório) presente em
+      qualquer τ — o "penhasco" da versão anterior desaparece.
 - [x] Curva de trade-off: **não-monotônica** — cai antes de subir (τ baixo dilui o piso de 11,5%
       com fatias mínimas e seguras dos nomeados; τ maior traz volume maior e mais arriscado,
       inclusive D/E, puxando de volta para 10,3%). Alavanca por `classe_social` emerge dos dados:
@@ -231,8 +231,8 @@ alcançáveis no estoque não-contratado são inferidos.
       hipótese real, apoiada em segmento+score), as regras admitiriam **36,1% do `Reprovado`**
       (43,1k de 119,2k) a ~7,4% assumido, e 42,2% do `Aprovado` nomeado (32,6k) — expansão só via
       teste estagiado e monitorado. No `(missing)`, **nenhuma hipótese é pedida**: os 57,8k
-      `Reprovado` seguem negados (status quo do cliente), e os 37,5k `Aprovado` seguem aprovados
-      sem reavaliação — nem extrapolação nem negação nova, apenas preservação.
+      `Reprovado` seguem negados e os 37,5k `Aprovado` seguem aprovados — a Klavi não reavalia a
+      decisão do cliente no bloco que não enxerga, apenas a preserva.
 
 **3.3 — Fairness / disparate impact** (adiado da Fase 2) — *notebook 3.3*
 - [x] Approval por `regiao` (atual vs `policy_v1` simulada, população com região ~52%): **sem

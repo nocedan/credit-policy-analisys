@@ -124,10 +124,11 @@ Four sanity checks on the frozen shortlist before building a policy on it:
 
 ## 3.2 — Cutoff Simulation & Trade-off
 
-- `(missing)` has no score or demographics to condition a cutoff on, so it's excluded from the
-  τ-sweep and instead deferred to whatever the client already decided (`mode: keep_current`:
-  approve iff `STATUS ∈ {Aprovado, Contratado}`) — a fixed floor (49% of the book, 11.5%
-  descriptive) present at every τ, not a manufactured decision.
+- `(missing)` is missing **to Klavi** (no snapshot), not undecided — the client already rules this
+  block with its own process and score, which Klavi doesn't observe. So it's excluded from the
+  τ-sweep and `mode: keep_current` **defers to that process** (approve iff
+  `STATUS ∈ {Aprovado, Contratado}`) rather than overriding it — a fixed floor (49% of the book,
+  11.5% descriptive) present at every τ.
 - The resulting frontier is non-monotonic (dips before it rises): tight τ first admits tiny,
   very-safe named slivers that dilute the floor below 10%, before larger and riskier named
   volume pulls it back toward the unconditional 10.3%.
@@ -136,18 +137,6 @@ Four sanity checks on the frozen shortlist before building a policy on it:
   denied; `(missing)` deferred. Persisted to `references/policy_v1.yaml`.
 - Extrapolation to unlabeled stock kept bounded and separated by evidence: named-segment rules
   would admit 36.1% of `Reprovado` (43.1k) at an assumed ~7.4% — a real but bounded hypothesis;
-  `(missing)`'s 57.8k `Reprovado` stay denied (no hypothesis asked of the one segment with zero
-  conditioning variables). Recommendation: adopt named-segment cutoffs on current intake, expand
-  into named-segment `Reprovado` only via a staged, monitored test.
-
-## 3.3 — Fairness / Disparate Impact
-
-- No residual disparate impact by `regiao`; disparity **narrows** under `policy_v1` — four-fifths
-  ratio 0.832 → 0.931. Current-policy gap: Nordeste 42.3% vs Norte 50.9% approval; under
-  `policy_v1` the spread compresses to 72.1–77.5%, tracking measured regional risk (Nordeste
-  11.2% vs Sul 6.2% default) rather than region itself.
-- Caveats: test limited to the region-known ~52% of the funnel; proposed approvals are simulated
-  under the 3.2 transfer hypothesis — re-run on realized approvals once the policy or its staged
-  test goes live.
-- **Fase 3 complete**: segmentation (3.0) → validated baseline & score axis + missing-score rule
-  (3.1) → cutoff frontier & operating point `policy_v1.yaml` (3.2) → fairness check passed (3.3).
+  `(missing)`'s 57.8k `Reprovado` stay denied — Klavi doesn't second-guess the client's own
+  decision on the block it can't see. Recommendation: adopt named-segment cutoffs on current
+  intake, expand into named-segment `Reprovado` only via a staged, monitored test.
