@@ -192,11 +192,22 @@ alcançáveis no estoque não-contratado são inferidos.
       mais segura, 6,5%) tem approval 43,7% < `A/B/C · Desconhecido` (50,1% com 7,8%).
 - [x] Colapso de células finas: `D/E · Formal` (22 rotuladas / 356 no total) fundida em
       `D/E · Autônomo/Formal` via `groups:` do `segment_spec.yaml`.
+- [x] Segmentação fundida **persistida em `data/processed/applications_segmented.parquet`**
+      (tabela de aplicações + coluna `segmento`; categórica ordenada sobrevive ao round-trip) —
+      3.1+ consomem a coluna em vez de re-derivar.
 
-**3.1 — Risco por segmento & WoE do score** (reusa 2.0)
-- [ ] Baseline por segmento (`woe_table`/`woe_over_time`/`psi` sobre `segmento`).
-- [ ] WoE de `score_klavi_2` dentro de cada segmento; checar monotonicidade.
-- [ ] Regra do score ausente (~54%): caminho explícito para o bin `(missing)` por segmento.
+**3.1 — Risco por segmento & WoE do score** (reusa 2.0; input = tabela processada do 3.0) — *notebook 3.1*
+- [x] Baseline por segmento: ordenação A/B/C > `(missing)` > D/E **persiste em 74/78 células
+      segmento×safra** (flips todos |WoE| ≤ 0,11, small-n); mix de segmentos com PSI ≤ 0,027 —
+      a estrutura demográfica é a parte estável da política (vs `score_klavi_2` PSI 0,32 no 2.2).
+- [x] Score dentro de cada segmento: **ordena o risco de ponta a ponta nas 5 células nomeadas**
+      (ex.: `D/E · Autônomo/Formal` 21,4%→6,1%, gradiente 3,5× — cutoff por segmento > negar a
+      célula inteira); monotonicidade estrita oscila no meio em 2 células (ruído de bin fino;
+      3.2 varre cutoff contínuo). `(missing)` sem eixo de score utilizável (113 rotuladas).
+- [x] Regra do score ausente, explícita: sem-score **dentro de célula nomeada** defaulta ao
+      baseline do segmento (Δ −2,3 a +1,9 pp vs com-score, sem sinal consistente — não é seleção
+      adversa); segmento `(missing)` = célula própria a 11,5% (decisão de apetite no 3.2 +
+      alavanca de aquisição de dados via consentimento snapshot/open-finance).
 
 **3.2 — Simulação de cutoffs & trade-off**
 - [ ] Varrer cutoff contínuo de `score_klavi_2` por segmento; approval × default rate no book `Contratado`.
