@@ -91,8 +91,8 @@ Four sanity checks on the frozen shortlist before building a policy on it:
 - **Weighting**: one-row-per-`uuid` drops only 849 of 24,148 rows; IV changes < 0.001, ranking
   unchanged. Robust to the multiplicity flagged in 1.2.
 - **Bottom line**: all four variables pass and move to Fase 3; `score_klavi_2` carries a watch
-  flag. `regiao`'s fairness exclusion will be tested for residual disparate impact once a policy
-  exists (3.3).
+  flag. `regiao` stays **excluded as a variable** on fairness grounds (proxy for protected
+  attributes / redlining risk).
 
 ## 3.0 — Segment Map & Stock
 

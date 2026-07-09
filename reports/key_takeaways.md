@@ -86,8 +86,8 @@ Four sanity checks on the frozen shortlist before building a policy on it:
 - **Weighting**: one-row-per-`uuid` drops only 849 of 24,148 rows; IV changes < 0.001, ranking
   unchanged. Robust to the multiplicity flagged in 1.2.
 - **Bottom line**: all four variables pass and move to Fase 3; `score_klavi_2` carries a watch
-  flag. `regiao`'s fairness exclusion will be tested for residual disparate impact once a policy
-  exists (3.3).
+  flag. `regiao` stays excluded on fairness grounds — its residual disparate impact is checked in
+  3.3.
 
 ## 3.0 — Segment Map & Stock
 
@@ -119,10 +119,11 @@ Four sanity checks on the frozen shortlist before building a policy on it:
 
 ## 3.2 — Cutoff Simulation & Trade-off
 
-- `(missing)` has no score or demographics to condition a cutoff on, so it's excluded from the
-  τ-sweep and instead deferred to whatever the client already decided (`mode: keep_current`:
-  approve iff `STATUS ∈ {Aprovado, Contratado}`) — a fixed floor (49% of the book, 11.5%
-  descriptive) present at every τ, not a manufactured decision.
+- `(missing)` is missing **to Klavi** (no snapshot), not undecided — the client already rules this
+  block with its own process and score, which Klavi doesn't observe. So it's excluded from the
+  τ-sweep and `mode: keep_current` **defers to that process** (approve iff
+  `STATUS ∈ {Aprovado, Contratado}`) rather than overriding it — a fixed floor (49% of the book,
+  11.5% descriptive) present at every τ.
 - The resulting frontier is non-monotonic (dips before it rises): tight τ first admits tiny,
   very-safe named slivers that dilute the floor below 10%, before larger and riskier named
   volume pulls it back toward the unconditional 10.3%.
@@ -131,9 +132,9 @@ Four sanity checks on the frozen shortlist before building a policy on it:
   denied; `(missing)` deferred. Persisted to `references/policy_v1.yaml`.
 - Extrapolation to unlabeled stock kept bounded and separated by evidence: named-segment rules
   would admit 36.1% of `Reprovado` (43.1k) at an assumed ~7.4% — a real but bounded hypothesis;
-  `(missing)`'s 57.8k `Reprovado` stay denied (no hypothesis asked of the one segment with zero
-  conditioning variables). Recommendation: adopt named-segment cutoffs on current intake, expand
-  into named-segment `Reprovado` only via a staged, monitored test.
+  `(missing)`'s 57.8k `Reprovado` stay denied — Klavi doesn't second-guess the client's own
+  decision on the block it can't see. Recommendation: adopt named-segment cutoffs on current
+  intake, expand into named-segment `Reprovado` only via a staged, monitored test.
 
 ## 3.3 — Fairness / Disparate Impact
 
