@@ -62,7 +62,9 @@ default too well often encodes information from after the decision.
 
 - **Binning sensitivity**: IV depends on the binning choice; too many bins with few bads
   inflates it. Enforce a minimum bin count, and use a smoothing constant when a bin has zero
-  goods or zero bads (avoids $\ln(0)$).
+  goods or zero bads (avoids $\ln(0)$). This project uses additive **0.5 smoothing** on the
+  good/bad counts — $\%\,goods_i = (goods_i + 0.5)/(G + 0.5)$, likewise for bads — in
+  `src/credit_policy/woe.py` (the same 0.5 is reused as the PSI `eps`).
 - **Univariate only**: two high-IV variables can be redundant — the correlation/redundancy
   step handles that.
 - **Selection bias**: on this data IV is computed on contracted loans only; the
