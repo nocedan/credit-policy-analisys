@@ -75,51 +75,43 @@ A **two-tier** policy, simple to explain and audit:
 ## Answers — method (explore, ensure quality, validate)
 
 **1. Explore, clean, and organize.**
-I would begin by reconciling the two raw files — `profile_case_credit.parquet` (performance: `uuid`, `DATA`, `SAFRA`,
-target `OVER30M2`, `STATUS`) and `transactions_case_credit.parquet` (application features: Klavi scores,
-`classe_social`, `status_empregaticio`, `regiao`, income, betting-risk, financial capacity) — into **one row per
-application** at the `uuid` + application-date grain, joined on the decision date. The grain is something I would
-**validate, not assume**: before settling on it I would test the natural alternative (one application per user per
-month) and confirm that same-month re-applications are genuinely distinct events, so the join neither collapses nor
-double-counts real decisions. *Tooling:* pandas for the reshape and join; seaborn/matplotlib for the first-pass
-distribution and coverage diagnostics that tell me where the data is thin.
+**Reconciled the two raw files into one row per application** — `profile_case_credit.parquet` (performance) and
+`transactions_case_credit.parquet` (features) joined at the `uuid` + application-date grain, on the decision date.
+The grain was **validated, not assumed**: the natural alternative (one application per user per month) was tested, and
+same-month re-applications turned out to be genuinely distinct contracts (each on its own date), while de-duplicating
+would have lost no feature snapshot — so the join neither collapses nor double-counts real decisions.
 
-Cleaning would be **deliberately conservative** — only provable sentinels (`-999999`) go to `NaN`, and missingness is
-carried as an **explicit category** rather than dropped or imputed, because "no snapshot" is itself predictive and
-discarding it would bias the sample. I would organize the work in layers (raw → interim → processed) and keep every
-judgement call — bin edges, segment definitions, cutoffs — as **version-controlled, human-editable specifications**
-driven by reusable functions, so the pipeline is reproducible end to end and any decision can be re-inspected and
-revised in one place.
+**Cleaning stayed deliberately conservative** — only provable sentinels (`-999999`) were sent to `NaN`; missingness was
+carried as an **explicit category**, never dropped or imputed, because "no snapshot" is itself predictive (~48% of
+applications carry none). The work was layered (raw → interim → processed), with every judgement call — bin edges,
+segments, cutoffs — kept as an editable spec so any decision can be re-inspected in one place.
 
-For the variables I would use **Weight-of-Evidence (WoE) binning**: quantile-seeded numeric cut points and one group per
-non-rare category, then merged by hand until each variable is **both stable across cohorts and monotone/discriminating**.
-I choose WoE because it puts mixed numeric and categorical features on a common, signed risk scale and lets me treat an
-explicit `(missing)` bin as a first-class category rather than a gap to impute.
+**Variables went through Weight-of-Evidence (WoE) binning** — quantile-seeded numeric cuts and one group per non-rare
+category, hand-tuned until each was **stable across cohorts and monotone/discriminating**. WoE puts mixed numeric and
+categorical features on a common, signed risk scale and makes the `(missing)` bin a first-class category, not a gap to impute.
 
 **2. Criteria for relevant, accurate, and representative insight.**
-- **Representativeness:** measure only where a target exists (the labeled `Contratado` sample) and state the
-  **selection bias** up front — anything estimated on contracted loans is a hypothesis about the rejected population,
-  not a measurement of it.
-- **Coverage before signal — Information Value on WoE bins:** I would rank variables by **Information Value (IV)**
-  computed on the WoE bins (`WoE = ln(%goods/%bads)`, positive = safer, with additive smoothing to stabilize thin
-  bins), and **keep the `(missing)` bin inside the IV** so a variable's score reflects how often it is actually
-  available, not just how well it separates when present — a strong separator with poor coverage cannot carry a policy.
-- **Redundancy — correlation on WoE-encoded, overlap-only rows:** I would WoE-encode the candidates and Pearson-correlate
-  them, but only on rows where **both** are observed, to avoid the spurious correlation shared missingness would inject;
-  pairs above |r| ≈ 0.5 get pruned or down-weighted so the policy doesn't double-count one underlying signal.
-- **Stability over time — PSI + IV per cohort:** only variables that hold cohort by cohort survive. I would track the
-  **Population Stability Index (PSI)** of each variable's bin distribution across `SAFRA` (the usual
-  < 0.1 / 0.1–0.25 / > 0.25 read) and recompute IV within each cohort, so a one-month artifact can't pass as durable
-  signal.
-- **Fairness by design:** exclude proxies for protected attributes (e.g. `regiao`) at the design stage, not only after
-  checking performance.
+- **Representativeness — measured only where a target exists** (the labeled `Contratado` sample, 24,148 rows at 10.3%
+  bad), with the **selection bias** stated up front: anything estimated on contracted loans is a hypothesis about the
+  rejected population, not a measurement.
+- **Coverage before signal — IV on WoE bins.** Variables were ranked by **Information Value** (`WoE = ln(%goods/%bads)`,
+  positive = safer, 0.5 smoothing on thin bins), keeping the `(missing)` bin **inside** the IV so the score reflects real
+  availability — and no variable emerged as a strong separator, which is why the policy combines several rather than leaning on one.
+- **Redundancy — WoE correlation, overlap-only.** WoE-encoded candidates were Pearson-correlated on rows where **both**
+  are observed; co-missingness otherwise inflates it (`classe_social` × `Financial Capacity` reads 0.73 naively but 0.39
+  on the overlap). No pair crossed |r| ≈ 0.5.
+- **Stability over time — PSI + IV per cohort.** Each variable's bin distribution was tracked via **PSI** across `SAFRA`
+  (< 0.1 / 0.1–0.25 / > 0.25) with IV recomputed within cohorts; three of four held, and `score_klavi_2` — the one
+  exception (PSI ≈ 0.32 in one vintage) — was flagged rather than hidden.
+- **Fairness by design** — `regiao`, though relevant, was excluded at the design stage as a proxy for protected
+  attributes, not after the fact.
 
 **3. Validate approach and insights.**
-- **Stability:** confirm the risk ordering is consistent across cohorts, not an artifact of a single month.
-- **Two-level policy validation:** where the policy segments and then cuts by score, I would validate each layer
-  separately — the **segment baseline** ordering must be sign-consistent cohort by cohort, and the score must order risk
-  **monotonically within each segment** before it is trusted as the cutoff axis.
-- **Counterfactual impact:** quantify the proposal with a **swap-set analysis** and an **approval × default trade-off
-  curve** on the labeled book, so any gain is measured on observed performance rather than promised.
-- **Rollout:** apply the cutoffs on the current intake first (observable effect), and expand to the currently-rejected
-  population only through a **staged, monitored test** — which also generates the labels that are missing today.
+- **Stability** — the segment risk ordering was confirmed **sign-consistent cohort by cohort**, not an artifact of a single month.
+- **Two-level policy validation** — the layers were validated separately: the **segment baseline** ordering first, then
+  the score confirmed to **order risk monotonically within each named segment** before it was trusted as the cutoff axis.
+- **Counterfactual impact** — the proposal was quantified with a **swap-set analysis** and an **approval × default
+  trade-off curve** on the labeled book, so the gain is measured on observed performance, not promised.
+- **Rollout** — the cutoffs already present in the current intake were adopted as a measured effect, and expansion to the
+  rejected population is staged behind a **monitored test** (which also generates the labels missing today); the
+  disparate-impact check on the resulting policy passed.
