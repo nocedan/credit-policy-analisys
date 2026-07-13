@@ -104,7 +104,7 @@ categorical features on a common, signed risk scale and makes the `(missing)` bi
   (< 0.1 / 0.1–0.25 / > 0.25) with IV recomputed within cohorts; three of four held, and `score_klavi_2` — the one
   exception (PSI ≈ 0.32 in one vintage) — was flagged rather than hidden.
 - **Fairness by design** — `regiao`, though relevant, was excluded at the design stage as a proxy for protected
-  attributes, not after the fact.
+  attributes.
 
 **3. Validate approach and insights.**
 - **Stability** — the segment risk ordering was confirmed **sign-consistent cohort by cohort**, not an artifact of a single month.
