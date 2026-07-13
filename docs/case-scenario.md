@@ -37,32 +37,38 @@ No single variable discriminates strongly — `classe_social` leads, followed cl
 `regiao` 0.025.)
 
 **Q2 — Which are good candidates for a practical policy (rules + score)?**
-Four variables, all validated (non-redundant, stable over time, no leakage, robust to
+Three variables, all validated (non-redundant, stable over time, no leakage, robust to
 re-application): **`classe_social`, `score_klavi_2`, and `status_empregaticio`**.
 Two caveats: `regiao`, though relevant (Q1), is **excluded for fairness** — a proxy for
 protected attributes; and Financial Capacity, which has negative values -- something to be validated and understood.
 
 **Q3 — How to turn this into an objective, justifiable proposal for the business?**
-One possible proposal would be a **two-tier** policy, simple to explain and audit:
+A **two-tier** policy, simple to explain and audit:
 
-1. **Segment** by the stable socioeconomic block — `classe_social` × `status_empregaticio`. It is the
-   *stable* part across the observed cohorts.
-2. **Cut by score** within each segment (`score_klavi_2`). The score ranks risk end to end
-   *within* each cell (in the riskiest D/E, the cut separates 21% from 6% default) — more
-   precise and fairer than denying an entire cell.
+1. **Segment** by the stable socioeconomic block — `classe_social` × `status_empregaticio`. Nearly
+   **half the book (49%) carries no Klavi snapshot** (no score, no demographics); this `(missing)`
+   block defaults at **11.5%** — below the operating cutoff (τ\* = 11.5%) — so it stays in as a
+   **fixed floor**, and the score cut works only on the **~51% of segments Klavi can see**.
+2. **Cut by score** (`score_klavi_2`) within each segment. The score orders risk end to end *inside*
+   a cell — in the riskiest (D/E) it separates a ~21%-default slice below the cut from ~6% above — so
+   a cut is more precise and fairer than denying the whole cell.
 
-- **Impact (measured on the book):** at the **same approval level (~90%)**, default drops from **10.3% to
-  9.64%**; the rejected slice defaults at 16.3%. The policy corrects distortions of the current bar — today the
-  safest cell (`A/B/C·Formal`, 6.5%) is approved *less* than riskier cells.
-- **Where Klavi adds value, it refines; where it doesn't, it respects the client's process:** in ~half the funnel
-  Klavi receives no snapshot. This does **not** mean a decision without information — granting there follows the
-  **client's own process** (its data and score), which Klavi simply does not observe. The proposed bar
-  **does not override** that process: it keeps the current decision in that block and concentrates the
-  refinement where Klavi actually adds signal.
-- **Safe expansion (the selection bias, resolved by design):** performance only exists for the
-  contracted, so opening granting to those currently rejected is a *hypothesis*, not a measurement. The recommendation
-  **adopts the cuts already in the current flow** (measured effect) and treats expansion as a **staged and
-  monitored test** — which, as a bonus, generates the labels that are missing today.
+- **Impact (one book, re-cut).** At the **same ~90% retention**, the policy lowers default from **10.3%
+  to 9.64%** (the 10% it removes default at 16.3%). Both figures come from the *same* 24,148 contracted
+  rows scored two ways — keep-all vs. the policy — not two bars applied to different populations. The
+  whole gain comes from re-cutting the ~51% named segments (kept at **~7.4%**); the 49% `(missing)` floor
+  passes through at 11.5%, which is what holds the blend at 9.64% rather than lower. The policy also fixes
+  a distortion of the current bar, which today approves the safest cell (`A/B/C·Formal`, 6.5%) *less* than
+  riskier ones.
+- **Refine where Klavi has signal, respect the client where it doesn't.** For the ~half of the funnel
+  with no snapshot, the policy makes no new call: it keeps the client's own decision (its data, its
+  score, which Klavi never sees) and concentrates the refinement where Klavi actually adds signal.
+- **Safe expansion (selection bias, handled by design).** Performance exists only for the contracted, so
+  lending to today's rejected is a *hypothesis*, not a measurement. The frontier is concentrated: of the
+  ~119k rejected applications, the rules would re-admit **~43k (36%)** — almost all in **A/B/C** (no score
+  gate, expected ~7.4% vs the 10.3% book), only top-score slivers of **D/E**, and none of `(missing)`. The
+  recommendation **adopts the cuts already in the current flow** (a measured effect) and expands only
+  through a **staged, monitored test** — which, as a bonus, produces the labels missing today.
 
 ---
 
