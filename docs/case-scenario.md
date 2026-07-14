@@ -33,7 +33,7 @@ proposal addresses this point head-on (item Q3, "safe expansion").
 No single variable discriminates strongly — `classe_social` leads, followed closely by `Financial Capacity`, `score_klavi_2` and
 `status_empregaticio`. The "open-finance" trio (`score_klavi_1`, `Renda`, `risco_aposta`) is unusable, but because it is **missing in 95.5% of applications**. *Implication:* the policy must
 **combine complementary variables**, not rely on a single score. (IV ranking: `classe_social`
-0.091 > `Financial Capacity` 0.067 > `score_klavi_2` 0.034 > `status_empregaticio` 0.031 >
+0.089 > `Financial Capacity` 0.067 > `score_klavi_2` 0.034 > `status_empregaticio` 0.031 >
 `regiao` 0.025.)
 
 **Q2 — Which are good candidates for a practical policy (rules + score)?**
