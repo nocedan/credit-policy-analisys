@@ -113,5 +113,4 @@ categorical features on a common, signed risk scale and makes the `(missing)` bi
 - **Counterfactual impact** — the proposal was quantified with a **swap-set analysis** and an **approval × default
   trade-off curve** on the labeled book, so the gain is measured on observed performance, not promised.
 - **Rollout** — the cutoffs already present in the current intake were adopted as a measured effect, and expansion to the
-  rejected population is staged behind a **monitored test** (which also generates the labels missing today); the
-  disparate-impact check on the resulting policy passed.
+  rejected population is staged behind a **monitored test** (which also generates the labels missing today).

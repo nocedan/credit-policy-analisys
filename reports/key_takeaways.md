@@ -89,8 +89,7 @@ Four sanity checks on the frozen shortlist before building a policy on it:
 - **Weighting**: one-row-per-`uuid` drops only 849 of 24,148 rows; IV changes < 0.001, ranking
   unchanged. Robust to the multiplicity flagged in 1.2.
 - **Bottom line**: all four variables pass and move to Fase 3; `score_klavi_2` carries a watch
-  flag. `regiao` stays excluded on fairness grounds — its residual disparate impact is checked in
-  3.3.
+  flag. `regiao` stays excluded on fairness grounds.
 
 ## 3.0 — Segment Map & Stock
 
@@ -138,15 +137,3 @@ Four sanity checks on the frozen shortlist before building a policy on it:
   `(missing)`'s 57.8k `Reprovado` stay denied — Klavi doesn't second-guess the client's own
   decision on the block it can't see. Recommendation: adopt named-segment cutoffs on current
   intake, expand into named-segment `Reprovado` only via a staged, monitored test.
-
-## 3.3 — Fairness / Disparate Impact
-
-- No residual disparate impact by `regiao`; disparity **narrows** under `policy_v1` — four-fifths
-  ratio 0.832 → 0.931. Current-policy gap: Nordeste 42.3% vs Norte 50.9% approval; under
-  `policy_v1` the spread compresses to 72.1–77.5%, tracking measured regional risk (Nordeste
-  11.2% vs Sul 6.2% default) rather than region itself.
-- Caveats: test limited to the region-known ~52% of the funnel; proposed approvals are simulated
-  under the 3.2 transfer hypothesis — re-run on realized approvals once the policy or its staged
-  test goes live.
-- **Fase 3 complete**: segmentation (3.0) → validated baseline & score axis + missing-score rule
-  (3.1) → cutoff frontier & operating point `policy_v1.yaml` (3.2) → fairness check passed (3.3).

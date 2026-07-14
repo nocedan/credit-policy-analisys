@@ -1,7 +1,7 @@
 """Policy spec: per-segment score cutoffs + explicit scoreless paths.
 
 Hand-editable YAML (``references/policy_v1.yaml``), written by notebook 3.2 (operating point)
-and consumed by 3.3+. Schema — one rule per segment of the persisted segmentation:
+and consumed downstream. Schema — one rule per segment of the persisted segmentation:
 
     segments:
       <segment>:
@@ -22,7 +22,7 @@ import pandas as pd
 import yaml
 
 _HEADER = """\
-# Política v1 — ponto de operação escolhido no notebook 3.2 (fonte única de verdade p/ 3.3+).
+# Política v1 — ponto de operação escolhido no notebook 3.2 (fonte única de verdade).
 # Por segmento: score_min (null = sem gate; .inf = nega os com-score) e o caminho dos sem-score.
 # Cutoffs medidos no book Contratado; arredondar/recalibrar antes de produção.
 """

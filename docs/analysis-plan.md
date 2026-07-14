@@ -138,7 +138,7 @@ seguintes.
 - [x] Shortlist `VAR_SELECTION` (congelada em `credit_policy.VAR_SELECTION`): `classe_social`,
       `Capacidade Financeira`, `score_klavi_2`, `status_empregaticio`. **`regiao` (próxima por IV,
       0,025) excluída por fairness** — região é proxy de atributos protegidos (risco de redlining /
-      disparate impact); o teste de disparate impact fica para a Fase 3 (precisa do scorecard).
+      disparate impact).
 - [x] Estabilidade do sinal (visual): WoE por bin ao longo de SAFRA (2.0 §6) —
       `classe_social` a mais estável; separação de `score_klavi_2` comprime a partir de 202503.
 - [x] **PSI** por variável ao longo de SAFRA e **IV por vintage** (2.2 §3): três estáveis
@@ -226,7 +226,7 @@ alcançáveis no estoque não-contratado são inferidos.
       A/B/C sem gate de score; D/E com cutoffs reais (≥ 595 / ≥ 518) e sem-score negado.
 - [x] Ponto de operação recomendado: **τ\\* = 11,5%** (nos nomeados) → mantém 90% do book a
       **9,64% vs 10,30%** (o que sai defaulta a 16,3%); persistido em `references/policy_v1.yaml`,
-      aplicado por `credit_policy.policy.approve` (fonte única p/ 3.3+).
+      aplicado por `credit_policy.policy.approve` (fonte única de verdade).
 - [x] Cenário de extrapolação **sinalizado e agora delimitado**: nos segmentos nomeados (única
       hipótese real, apoiada em segmento+score), as regras admitiriam **36,1% do `Reprovado`**
       (43,1k de 119,2k) a ~7,4% assumido, e 42,2% do `Aprovado` nomeado (32,6k) — expansão só via
@@ -234,15 +234,9 @@ alcançáveis no estoque não-contratado são inferidos.
       `Reprovado` seguem negados e os 37,5k `Aprovado` seguem aprovados — a Klavi não reavalia a
       decisão do cliente no bloco que não enxerga, apenas a preserva.
 
-**3.3 — Fairness / disparate impact** (adiado da Fase 2) — *notebook 3.3*
-- [x] Approval por `regiao` (atual vs `policy_v1` simulada, população com região ~52%): **sem
-      impacto díspar residual** — four-fifths passa e *melhora* (0,832 → 0,931); diferenças
-      remanescentes acompanham o risco medido por região (Nordeste 11,2% vs Sul 6,2%), não a
-      região em si. Reavaliar com aprovações realizadas quando a política/teste entrar em vigor.
-
 **Saída da fase**: política v1 completa e justificável — segmentação persistida (3.0), baseline e
 eixo de score validados + regra do sem-score (3.1), fronteira de trade-off com ponto de operação
-em `policy_v1.yaml` e o bloco `(missing)` deferido ao status quo do cliente (3.2), checagem de
-fairness aprovada (3.3). Expansão ao estoque `Reprovado` permanece hipótese a testar de forma
+em `policy_v1.yaml` e o bloco `(missing)` deferido ao status quo do cliente (3.2). Expansão ao
+estoque `Reprovado` permanece hipótese a testar de forma
 estagiada, restrita aos segmentos nomeados onde há evidência; `(missing)` não é objeto de
 hipótese — conversão em células nomeadas (mais dados) é a maior alavanca estrutural futura.
