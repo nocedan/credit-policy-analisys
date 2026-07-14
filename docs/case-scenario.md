@@ -33,7 +33,7 @@ proposal addresses this point head-on (item Q3, "safe expansion").
 No single variable discriminates strongly — `classe_social` leads, followed closely by `Financial Capacity`, `score_klavi_2` and
 `status_empregaticio`. The "open-finance" trio (`score_klavi_1`, `Renda`, `risco_aposta`) is unusable, but because it is **missing in 95.5% of applications**. *Implication:* the policy must
 **combine complementary variables**, not rely on a single score. (IV ranking: `classe_social`
-0.091 > `Financial Capacity` 0.067 > `score_klavi_2` 0.037 > `status_empregaticio` 0.031 >
+0.091 > `Financial Capacity` 0.067 > `score_klavi_2` 0.034 > `status_empregaticio` 0.031 >
 `regiao` 0.025.)
 
 **Q2 — Which are good candidates for a practical policy (rules + score)?**
@@ -102,7 +102,7 @@ categorical features on a common, signed risk scale and makes the `(missing)` bi
   on the overlap). No pair crossed |r| ≈ 0.5.
 - **Stability over time — PSI + IV per cohort.** Each variable's bin distribution was tracked via **PSI** across `SAFRA`
   (< 0.1 / 0.1–0.25 / > 0.25) with IV recomputed within cohorts; three of four held, and `score_klavi_2` — the one
-  exception (PSI ≈ 0.32 in one vintage) — was flagged rather than hidden.
+  exception (PSI ≈ 0.31 in one vintage) — was flagged rather than hidden.
 - **Fairness by design** — `regiao`, though relevant, was excluded at the design stage as a proxy for protected
   attributes.
 

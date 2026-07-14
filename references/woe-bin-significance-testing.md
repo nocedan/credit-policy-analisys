@@ -162,6 +162,9 @@ month's WoE.
   remedy is to **merge 484–516 with 516–603** into one monotone interior bin. That single
   re-bin also eliminates 4 of the 7 cohort inversions by construction, which is exactly the
   "coarser / monotone" fix the 2.0 §6 note gestured at — now with a test behind it.
+  **Applied**: `references/bin_spec.yaml` now sets `score_klavi_2.cuts: [484, 603]` (3 bins
+  `≤484 | 484–603 | >603`); notebooks 2.x/3.1 were re-run against it, and the merged scheme's
+  adjacent boundaries are both highly significant (z = 4.3 and 4.0).
 
 ## The generalizable recipe
 

@@ -62,7 +62,7 @@ One section per notebook.
 - Labeled sample: 24,148 applications, 2,488 bads (10.30% default), 1,417–2,367 rows per safra.
   Coverage in three tiers: flags 100%, broad variables ~46–52%, open-finance trio ~4.5%.
 - IV ranking: signal is **modest across the board** — no variable reaches "medium" (0.1).
-  `classe_social` 0.091, `Capacidade Financeira` 0.067, `score_klavi_2` 0.037,
+  `classe_social` 0.091, `Capacidade Financeira` 0.067, `score_klavi_2` 0.034,
   `status_empregaticio` 0.031, `regiao` 0.025. Nothing near leakage territory (> 0.5). The
   open-finance trio scores near zero (IV ≤ 0.006) **because of 95.5% missingness**, not
   intrinsic weakness — `has_snapshot` alone has IV 0.016.
@@ -80,7 +80,10 @@ Four sanity checks on the frozen shortlist before building a policy on it:
   where both are observed). **Keep all four** — socioeconomic block + financial block,
   complementary.
 - **Stability**: three of four rock-solid across 13 vintages (PSI ≈ 0.02–0.03). `score_klavi_2`
-  is the exception — PSI 0.32 in one safra, IV volatile (0.01–0.18) — kept but flagged **"watch"**.
+  is the exception — PSI 0.31 in one safra (population drift); its per-cohort IV scatter
+  (~0.02–0.15) is largely low-volume sampling noise, and its bins were **coarsened to 3 monotone**
+  (the finer middle cut was not statistically significant). Kept but flagged **"watch"** for the
+  drift. See `references/woe-bin-significance-testing.md`.
 - **Leakage**: none — every candidate is weak-tier (IV < 0.1), and all are point-in-time
   snapshots by construction. Clean.
 - **Weighting**: one-row-per-`uuid` drops only 849 of 24,148 rows; IV changes < 0.001, ranking
@@ -109,7 +112,7 @@ Four sanity checks on the frozen shortlist before building a policy on it:
 
 - Baseline validated: the A/B/C > `(missing)` > D/E risk ordering holds in 74 of 78
   segment×vintage cells (all 4 flips are small-n noise); segment-mix PSI ≤ 0.027 — the
-  demographic structure is the stable part of the policy (unlike `score_klavi_2` alone, PSI 0.32).
+  demographic structure is the stable part of the policy (unlike `score_klavi_2` alone, PSI 0.31).
 - Score axis validated: `score_klavi_2` orders risk end-to-end in all 5 named cells; steepest
   inside `D/E · Autônomo/Formal` (21.4% → 6.1%) — per-segment cutoffs beat blanket segment
   denial.
