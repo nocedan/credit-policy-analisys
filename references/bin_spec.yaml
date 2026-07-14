@@ -10,7 +10,7 @@ score_klavi_1:
   cuts: [48, 60, 70]
 score_klavi_2:
   type: numeric
-  cuts: [484, 516, 603]
+  cuts: [484, 603]
 Renda:
   type: numeric
   cuts: [1383, 1905, 2397, 3272]

@@ -1,4 +1,4 @@
-# Política v1 — ponto de operação escolhido no notebook 3.2 (fonte única de verdade p/ 3.3+).
+# Política v1 — ponto de operação escolhido no notebook 3.2 (fonte única de verdade).
 # Por segmento: score_min (null = sem gate; .inf = nega os com-score) e o caminho dos sem-score.
 # Cutoffs medidos no book Contratado; arredondar/recalibrar antes de produção.
 tau: 0.115
