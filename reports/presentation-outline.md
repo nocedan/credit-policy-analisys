@@ -6,13 +6,13 @@ Slide-by-slide structure for the business-team deck, synthesized from the faithf
 
 **How to use this file.** One section per slide: **Key message** (the single line the slide must
 land), **Bullets** (supporting points, numbers taken verbatim from `key_takeaways.md`), and the
-**Figure** (embedded below each slide, with its source notebook). All 10 figures are exported to
+**Figure** (embedded below each slide, with its source notebook). All 9 figures are exported to
 `reports/figures/` (saved in-notebook via `credit_policy.save_fig`; re-run the source notebook to
 refresh one). Assemble the deck against this outline; keep numbers reconciled with
 `key_takeaways.md`.
 
-Storyline: *why now → the data & its catch → method → Q1 variables → validation → Q2 candidates →
-Q3 policy → segment tiers → score axis → trade-off → impact → safe expansion → validation.*
+Storyline: *why now → the data & its catch → Q1 variables → validation → policy & risk tiers →
+score axis → trade-off → impact → safe expansion → validation.*
 
 ---
 
@@ -24,6 +24,7 @@ improve risk assessment.
 - Senior Data Scientist @ Klavi; one-week analysis of client-provided data.
 - Deliverable: which variables predict default, which are policy candidates, and an objective,
   justifiable proposal.
+- Author: Daniel Noce da Silva
 
 *Figure: none (title).*
 
@@ -47,13 +48,10 @@ vs approval rate ↓ by vintage).
 
 ## Slide 3 — The data & the catch
 
-**Key message:** Two mis-named raw files reconciled to one row per application — and only a labeled
-slice has performance (selection bias, stated up front).
+**Key message:** Two raw files reconciled to one row per application — and only a labeled
+slice has performance (selection bias).
 
-- `profile_*` = **performance**, `transactions_*` = **features**; joined at `uuid` + application
-  date (grain validated, not assumed — same-month re-applications are genuinely distinct contracts).
-- Target `OVER30M2` exists **only for 24,148 `Contratado`** (10.30% default) → selection bias:
-  measured only where a target exists; the rejected population is a hypothesis, not a measurement.
+- Target `OVER30M2` exists **only for 24,148 `Contratado`** (10.30% default) → selection bias
 - Only **52%** of applications carry a feature snapshot at decision time, uniform across `STATUS`
   (availability doesn't differ by outcome); broad vars miss ~54%, open-finance trio ~95%.
 
@@ -64,23 +62,7 @@ the labeled 24,148 `Contratado` slice highlighted).
 
 ---
 
-## Slide 4 — Method at a glance
-
-**Key message:** Everything is a signed, auditable spec — WoE/IV with `(missing)` as a first-class
-category, layered raw → interim → processed.
-
-- **WoE/IV** puts mixed numeric + categorical features on a common signed risk scale
-  (`WoE = ln(%goods/%bads)`, positive = safer; 0.5 smoothing on thin bins).
-- `(missing)` kept **inside** the IV — "no snapshot" is itself predictive (~48% carry none), never
-  imputed or dropped.
-- Layered pipeline; every judgement call (bin edges, segments, cutoffs) is an **editable spec**
-  (`references/*.yaml`) re-inspectable in one place.
-
-*Figure: optional schematic (raw → interim → processed + spec artifacts); no notebook figure.*
-
----
-
-## Slide 5 — Q1: Which variables predict default
+## Slide 4 — Q1: Which variables predict default
 
 **Key message:** No single variable discriminates strongly — the policy must **combine
 complementary variables**, not lean on one score.
@@ -90,7 +72,6 @@ complementary variables**, not lean on one score.
   `regiao` 0.025.
 - Open-finance trio (`score_klavi_1`/`Renda`/`risco_aposta`) scores ~0 — because of **95.5%
   missingness**, not intrinsic weakness.
-- Nothing near leakage territory (> 0.5).
 
 **Figure** — `fig_iv_ranking.png` · nb 2.1 (horizontal IV bar ranking; 0.1 "medium" threshold
 marked; the open-finance trio near zero from missingness).
@@ -99,7 +80,7 @@ marked; the open-finance trio near zero from missingness).
 
 ---
 
-## Slide 6 — Validating the shortlist
+## Slide 5 — Validating the shortlist
 
 **Key message:** The four candidates survive redundancy, stability, leakage, and fairness checks —
 we trust them before building on them.
@@ -118,47 +99,20 @@ we trust them before building on them.
 
 ---
 
-## Slide 7 — Q2: Policy candidates
+## Slide 6 — Q3: A two-tier policy
 
-**Key message:** Three validated variables carry the policy; two documented caveats.
+**Key message:** A two-tier policy: segment by the stable socioeconomic block — which orders
+cleanly into three risk tiers (2.4× spread) — then score-cut within each named cell.
 
-- Candidates: **`classe_social`, `score_klavi_2`, `status_empregaticio`** — non-redundant, stable,
-  no leakage, robust to re-application.
-- Caveat 1: `regiao` relevant but **excluded for fairness**.
-- Caveat 2: `Capacidade Financeira` has negative values — kept out of v1, to validate/understand
-  before use as a 2nd axis.
-
-**Figure** — reuses the Slide 5 IV ranking + Slide 6 stability figure (no new figure).
-
----
-
-## Slide 8 — Q3: A two-tier policy
-
-**Key message:** Segment by the stable socioeconomic block, then cut by score within each
-segment — simple to explain and audit.
-
-- **Tier 1 — Segment:** `classe_social` × `status_empregaticio` (5 named cells + `(missing)`).
+- **Tier 1 — Segment:** `classe_social` × `status_empregaticio` — 5 named cells + `(missing)`.
 - **Tier 2 — Score cut** (`score_klavi_2`) *within* each named cell.
-- Nearly **half the book (49%) carries no Klavi snapshot** — this `(missing)` block defaults at
-  **11.5%** (below the cutoff) and stays in as a **fixed floor**; the score cut works only on the
-  ~51% Klavi can see.
-
-**Figure** — `fig_segment_map.png` · nb 3.0 (current policy by segment — STATUS mix per cell with
-total volumes; the `(missing)` mass at ~49%).
-
-![STATUS mix per segment under the current policy](figures/fig_segment_map.png)
-
----
-
-## Slide 9 — Segment risk tiers & the current-policy misorder
-
-**Key message:** Segments order cleanly by risk — and today's bar approves the *safest* cell less
-than a riskier one.
-
-- Three tiers: **A/B/C 6.5–7.8%** · **`(missing)` 11.5%** · **D/E 15.5–16.4%** (2.4× spread).
-- Direct swap-set evidence: `A/B/C · Formal` (safest, 6.5%) approved **43.7%** — *less* than a
-  riskier A/B/C cell (50.1% at 7.8%).
-- `D/E · Formal` (too thin, 22 labeled) merged into `D/E · Autônomo/Formal`.
+- **Three clean risk tiers** (the ordering that justifies segmenting first): A/B/C **6.5–7.8%** ·
+  `(missing)` **11.5%** · D/E **15.5–16.4%** (2.4× spread).
+- **`(missing)` = 49% of the book** carries no snapshot → an **11.5% fixed floor**; the score cut
+  works only on the ~51% Klavi can see.
+- **Fixes today's misorder:** the current bar approves `A/B/C · Formal` (safest, 6.5%) *less*
+  (**43.7%**) than a riskier A/B/C cell (50.1% at 7.8%). *(`D/E · Formal`, 22 labeled, merged into
+  `D/E · Autônomo/Formal`.)*
 
 **Figure** — `fig_segment_risk_tiers.png` · nb 3.0 (measured default rate by segment vs the
 unlabeled stock outside the book).
@@ -167,7 +121,7 @@ unlabeled stock outside the book).
 
 ---
 
-## Slide 10 — Score orders risk inside a segment
+## Slide 7 — Score orders risk inside a segment
 
 **Key message:** A score cut is more precise *and* fairer than denying a whole cell.
 
@@ -183,7 +137,7 @@ segment; steepest gradient in `D/E · Autônomo/Formal`).
 
 ---
 
-## Slide 11 — Trade-off & operating point
+## Slide 8 — Trade-off & operating point
 
 **Key message:** A parameterized risk-tolerance τ traces the approval × default frontier; we pick a
 defensible operating point.
@@ -201,7 +155,7 @@ defensible operating point.
 
 ---
 
-## Slide 12 — Impact (one book, re-cut)
+## Slide 9 — Impact (one book, re-cut)
 
 **Key message:** At the same ~90% retention, default drops **10.30% → 9.64%** — measured on the
 same book scored two ways, not two populations.
@@ -218,7 +172,7 @@ default 10.30% → 9.64% at ~90% retention).
 
 ---
 
-## Slide 13 — Safe expansion under selection bias
+## Slide 10 — Safe expansion under selection bias
 
 **Key message:** Lending to today's rejected is a *hypothesis* — bounded, concentrated, and tested
 in stages.
@@ -237,7 +191,7 @@ A/B/C concentration, D/E slivers, `(missing)` excluded — 43,093 of 119,247, 36
 
 ---
 
-## Slide 14 — Validation & next steps
+## Slide 11 — Validation & next steps
 
 **Key message:** Every claim is validated on observed performance; the rollout is designed to be
 safe and self-improving.
