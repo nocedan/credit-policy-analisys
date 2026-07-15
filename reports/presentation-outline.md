@@ -12,7 +12,7 @@ refresh one). Assemble the deck against this outline; keep numbers reconciled wi
 `key_takeaways.md`.
 
 Storyline: *why now → the data & its catch → Q1 variables → validation → policy & risk tiers →
-score axis → trade-off → impact → safe expansion → validation.*
+score axis → trade-off & impact → safe expansion → validation.*
 
 ---
 
@@ -128,7 +128,6 @@ unlabeled stock outside the book).
 - `score_klavi_2` orders risk **end-to-end in all 5 named cells**; steepest in
   `D/E · Autônomo/Formal` (**21.4% → 6.1%**).
 - Scoreless applicants inside a named cell default at that cell's baseline (no adverse selection).
-- `(missing)` segment has no usable score axis → handled as its own floor cell, not score-cut.
 
 **Figure** — `fig_score_within_segment.png` · nb 3.1 (default rate by score bin within each named
 segment; steepest gradient in `D/E · Autônomo/Formal`).
@@ -137,42 +136,29 @@ segment; steepest gradient in `D/E · Autônomo/Formal`).
 
 ---
 
-## Slide 8 — Trade-off & operating point
-
-**Key message:** A parameterized risk-tolerance τ traces the approval × default frontier; we pick a
-defensible operating point.
-
-- Frontier is **non-monotonic** — tight τ first admits tiny very-safe slivers (dips below 10%),
-  then larger riskier volume pulls back toward the 10.3% baseline.
-- Operating point **τ\* = 11.5%** (on named segments); persisted to `references/policy_v1.yaml`,
-  applied by `credit_policy.policy.approve` (single source of truth).
-- Rules: A/B/C no score gate; D/E score ≥ 595 / ≥ 518, scoreless denied; `(missing)` deferred.
-
-**Figure** — `fig_tradeoff_frontier.png` · nb 3.2 (retention × default frontier, one point per τ;
-τ\* = 11.5% and the `(missing)` floor marked).
-
-![Non-monotonic policy frontier with the operating point at tau-star](figures/fig_tradeoff_frontier.png)
-
----
-
-## Slide 9 — Impact (one book, re-cut)
+## Slide 8 — Trade-off & impact
 
 **Key message:** At the same ~90% retention, default drops **10.30% → 9.64%** — measured on the
-same book scored two ways, not two populations.
+same book using the same risk-tolerance τ per segment.
 
-- The removed 10% defaults at **16.3%**.
+- **Operating point τ\* = 11.5%** on named segments — the defensible point on the τ-swept
+  approval × default frontier *(left figure)*.
+- Rules: A/B/C no score gate; D/E score ≥ 595 / ≥ 518, scoreless denied; `(missing)` deferred.
+- The removed 10% defaults at **16.3%** *(right figure)*.
 - Gain comes from re-cutting the ~51% named segments (kept at ~7.4%); the 49% `(missing)` floor
   passes through at 11.5%, holding the blend at 9.64% rather than lower.
-- Also fixes the current bar's distortion (safest cell approved less than riskier ones).
 
-**Figure** — `fig_swapset_impact.png` · nb 3.2 (keep-all vs policy v1 on the same 24,148 rows:
-default 10.30% → 9.64% at ~90% retention).
+**Figures** — `fig_tradeoff_frontier.png` · nb 3.2 (retention × default frontier, one point per τ;
+τ\* = 11.5% and the `(missing)` floor marked) and `fig_swapset_impact.png` · nb 3.2 (keep-all vs
+policy v1 on the same 24,148 rows: default 10.30% → 9.64% at ~90% retention).
+
+![Non-monotonic policy frontier with the operating point at tau-star](figures/fig_tradeoff_frontier.png)
 
 ![Same book re-cut: default drops from 10.30% to 9.64%](figures/fig_swapset_impact.png)
 
 ---
 
-## Slide 10 — Safe expansion under selection bias
+## Slide 9 — Safe expansion under selection bias
 
 **Key message:** Lending to today's rejected is a *hypothesis* — bounded, concentrated, and tested
 in stages.
@@ -191,7 +177,7 @@ A/B/C concentration, D/E slivers, `(missing)` excluded — 43,093 of 119,247, 36
 
 ---
 
-## Slide 11 — Validation & next steps
+## Slide 10 — Validation & next steps
 
 **Key message:** Every claim is validated on observed performance; the rollout is designed to be
 safe and self-improving.
