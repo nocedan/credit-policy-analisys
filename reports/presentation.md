@@ -9,7 +9,8 @@ author: Daniel Noce da Silva
 
 <style>
 :root {
-  --brand:#0a5f5f; --brand2:#0d3b3b; --ink:#1b2530; --muted:#5b6b78; --panel:#eef6f6;
+  --brand:#123a5e; --brand2:#0d2740; --ink:#16202b; --muted:#51606e; --panel:#eef2f7;
+  --risk-low:#0d9488; --risk-mid:#d98a00; --risk-high:#d03b3b;
 }
 section {
   font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
@@ -40,7 +41,7 @@ section.dense blockquote { font-size:18px; }
 /* title slide */
 section.title {
   display:flex; flex-direction:column; justify-content:center; align-items:flex-start;
-  background:linear-gradient(135deg,#0a5f5f 0%,#0d3b3b 100%); color:#fff; padding:64px 74px;
+  background:linear-gradient(135deg,#123a5e 0%,#0d2740 100%); color:#fff; padding:64px 74px;
 }
 section.title h1 { color:#fff; font-size:52px; margin-bottom:4px; }
 section.title .sub { font-size:27px; color:#d7ecec; margin:8px 0 30px; }
