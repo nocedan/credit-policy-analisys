@@ -23,7 +23,7 @@
 
 **Why now.** Delinquency (`OVER30M2`) rose from ~8–10% (2024 cohorts) to 12.5%
 (Jun/2025) while the approval rate fell from ~54% to ~40%: the bar was tightened and, even so,
-default worsened. The current process responds to the scenario by *approving less* -- our proposal would be to *approve better*.
+default worsened. The current process responds to the scenario by *approving less* -- our proposal is to *improve how risk is assessed*.
 
 **How to read the numbers.** Everything that is *measured* comes from the labeled sample — the 24,148 `Contracted`
 (10.3% default), the only one with observable performance; the
