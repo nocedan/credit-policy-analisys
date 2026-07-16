@@ -33,6 +33,14 @@ blockquote p { margin:0; }
 .cols.wide { grid-template-columns:1.3fr .82fr; }
 .col img { width:100%; height:auto; border:1px solid #e3e8ea; border-radius:6px; }
 .col.figs img { margin-bottom:9px; }
+.wfig img { display:block; margin:8px auto 0; width:auto; max-width:100%; height:auto;
+            border:1px solid #e3e8ea; border-radius:6px; }
+/* px, not vh: in the HTML export vh resolves against the browser window, not the
+   720px slide, which blows the figure past the slide bounds. The slide is a fixed
+   1280x720, so px caps are stable in both HTML and PDF. */
+.wfig.big img { max-height:316px; }
+.wfig.mid img { max-height:266px; }
+.wfig.sm  img { max-height:216px; }
 section::after { color:var(--muted); font-size:14px; }
 /* dense slides */
 section.dense { font-size:18px; }
@@ -56,17 +64,14 @@ section.title .meta { font-size:19px; color:#bfe0e0; line-height:1.7; }
 <div class="sub">Using Klavi's variables to improve risk assessment</div>
 
 <div class="meta">
-Daniel Noce da Silva — Senior Data Scientist @ Klavi<br>
-One-week analysis of client-provided data<br>
-Deliverable: which variables predict default, which are policy candidates, and an objective proposal
+Daniel Noce da Silva — Data Scientist<br>
+Analysis of client-provided data<br>
+Deliverable: which variables predict default, which are policy candidates, and an example of policy review
 </div>
 
 ---
 
 ## Why now
-
-<div class="cols">
-<div class="col">
 
 > The bar was tightened and default *still* rose — the current process responds by approving less; we propose to **improve how risk is assessed**.
 
@@ -74,52 +79,40 @@ Deliverable: which variables predict default, which are policy candidates, and a
 - Approval rate fell from ~**54%** to ~**40%** over the same window.
 - The two moved the wrong way together: approvals tightened while default rose.
 
-</div>
-<div class="col">
+<div class="wfig big">
 
 ![](figures/fig_deterioration_default_vs_approval.png)
 
-</div>
 </div>
 
 ---
 
 ## The data & the catch
 
-<div class="cols">
-<div class="col">
-
 > Two raw files reconciled to one row per application — and only a labeled slice has performance (**selection bias**).
 
 - The target `OVER30M2` exists **only for the 24,148 `Contratado`** applications (**10.30%** default) — the one slice we can measure.
 - A feature snapshot is present at decision time for only **52%** of applications, evenly across `STATUS`. Coverage splits in two: broad variables miss ~**54%**, the open-finance trio ~**95%**.
 
-</div>
-<div class="col">
+<div class="wfig big">
 
 ![](figures/fig_coverage_by_status.png)
 
-</div>
 </div>
 
 ---
 
 ## Q1 — Which variables predict default
 
-<div class="cols">
-<div class="col">
-
 > No single variable discriminates strongly — the policy must **combine complementary variables**, not lean on one score.
 
 - No variable reaches the **0.1** "medium" IV threshold: `classe_social` **0.089** > `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** > `regiao` **0.025**.
 - The open-finance trio (`score_klavi_1` / `Renda` / `risco_aposta`) scores near **0**, driven by **95.5%** missingness.
 
-</div>
-<div class="col">
+<div class="wfig big">
 
 ![](figures/fig_iv_ranking.png)
 
-</div>
 </div>
 
 ---
@@ -128,9 +121,6 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 ## Validating the shortlist
 
-<div class="cols">
-<div class="col">
-
 > All four candidates pass the redundancy, stability, leakage, and fairness checks.
 
 - **Redundancy** — every pair correlates below **|r| 0.5** (max **0.39**, `classe_social` × `Capacidade Financeira`), splitting into a socioeconomic block and a financial block. *(A naive **0.73** between those two is a missing-data artifact.)*
@@ -138,12 +128,10 @@ Deliverable: which variables predict default, which are policy candidates, and a
 - **Leakage** — none; every candidate is a weak, point-in-time signal.
 - **Fairness** — `regiao` carries signal but is excluded as a proxy for protected attributes.
 
-</div>
-<div class="col">
+<div class="wfig big">
 
 ![](figures/fig_psi_over_vintage.png)
 
-</div>
 </div>
 
 ---
@@ -151,9 +139,6 @@ Deliverable: which variables predict default, which are policy candidates, and a
 <!-- _class: dense -->
 
 ## Q3 — A two-tier policy
-
-<div class="cols">
-<div class="col">
 
 > Segment by the stable socioeconomic block — which orders cleanly into three risk tiers (**2.4×** spread) — then score-cut within each named cell.
 
@@ -163,32 +148,25 @@ Deliverable: which variables predict default, which are policy candidates, and a
 - `(missing)` is **49%** of the book and carries no snapshot, so it sits at a fixed **11.5%** floor; the score cut reaches only the ~**51%** Klavi can see.
 - Today's bar misorders risk: `A/B/C · Formal` (safest, **6.5%**) is approved **43.7%** — less than a riskier A/B/C cell at **50.1%** (**7.8%**).
 
-</div>
-<div class="col">
+<div class="wfig sm">
 
 ![](figures/fig_segment_risk_tiers.png)
 
-</div>
 </div>
 
 ---
 
 ## Score orders risk inside a segment
 
-<div class="cols">
-<div class="col">
-
 > A score cut is more precise *and* fairer than denying a whole cell.
 
 - `score_klavi_2` orders risk **end-to-end in all 5 named cells**; steepest in `D/E · Autônomo/Formal` (**21.4% → 6.1%**).
 - Scoreless applicants inside a named cell default at that cell's own baseline.
 
-</div>
-<div class="col">
+<div class="wfig big">
 
 ![](figures/fig_score_within_segment.png)
 
-</div>
 </div>
 
 ---
@@ -223,19 +201,14 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 ## Safe expansion under selection bias
 
-<div class="cols">
-<div class="col">
-
 > Lending to today's rejected is a *hypothesis* — bounded, concentrated, and tested in stages.
 
 - Of ~**119k** rejected, the rules would re-admit ~**43k** (**36%**): almost all **A/B/C** (no score gate, ~**7.4%** expected), only top-score slivers of D/E, and none of `(missing)`.
 - The `(missing)` block stays with the client's own decision, since Klavi has no snapshot there.
 - The cuts already run in current intake (a measured effect); any expansion goes through a **staged, monitored test** that also generates today's missing labels.
 
-</div>
-<div class="col">
+<div class="wfig mid">
 
 ![](figures/fig_expansion_by_segment.png)
 
-</div>
 </div>
