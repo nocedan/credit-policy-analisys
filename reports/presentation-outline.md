@@ -86,8 +86,7 @@ marked; the open-finance trio near zero from missingness).
 **Key message:** All four candidates pass the redundancy, stability, and fairness checks.
 
 - **Redundancy** — every pair correlates below **|r| 0.5** (max **0.39**, `classe_social` ×
-  `Capacidade Financeira`), splitting into a socioeconomic block and a financial block. *(A naive
-  **0.73** between those two is a missing-data artifact.)*
+  `Capacidade Financeira`) — none redundant enough to drop.
 - **Stability** — three are steady across **13** vintages (PSI **0.02–0.03**); `score_klavi_2`
   drifts once (PSI **0.31**), its bins coarsened to 3 monotone.
 - **Fairness** — `regiao` carries signal but is excluded as a proxy for protected attributes.
@@ -102,13 +101,13 @@ marked; the open-finance trio near zero from missingness).
 ## Slide 6 — Q3: A two-tier policy
 
 **Key message:** A two-tier policy: segment by the stable socioeconomic block — which orders
-cleanly into three risk tiers (2.4× spread) — then score-cut within each named cell.
+cleanly into three risk tiers (2.5× spread) — then score-cut within each named cell.
 
 - **Tier 1 — Segment** by `classe_social` × `status_empregaticio`: **5** named cells + `(missing)`.
 - **Tier 2 — Score cut** on `score_klavi_2` *within* each named cell.
 - The named cells fall into three risk tiers: A/B/C **6.5–7.8%** · `(missing)` **11.5%** ·
-  D/E **15.5–16.4%** (**2.4×** spread).
-- `(missing)` is **49%** of the book and carries no snapshot, so it sits at a fixed **11.5%** floor;
+  D/E **15.5–16.4%** (**2.5×** spread).
+- `(missing)` is **49%** of the book so it sits at a fixed **11.5%** floor;
   the score cut reaches only the ~**51%** Klavi can see.
 - Today's bar misorders risk: `A/B/C · Formal` (safest, **6.5%**) is approved **43.7%** — less than
   a riskier A/B/C cell at **50.1%** (**7.8%**). *(`D/E · Formal`, 22 labeled, merged into

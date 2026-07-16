@@ -77,8 +77,8 @@ Four sanity checks on the frozen shortlist before building a policy on it:
 - **Redundancy**: all four are genuinely different signal — strongest overlap `classe_social` ×
   `Capacidade Financeira` at 0.39 (under the 0.5 threshold). A naive 0.73 correlation between
   them is an artifact of co-missingness, not real overlap (vanishes once restricted to rows
-  where both are observed). **Keep all four** — socioeconomic block + financial block,
-  complementary.
+  where both are observed). **Keep all four** — no pair crosses the redundancy line, so none gets
+  dropped for double-counting.
 - **Stability**: three of four rock-solid across 13 vintages (PSI ≈ 0.02–0.03). `score_klavi_2`
   is the exception — PSI 0.31 in one safra (population drift); its per-cohort IV scatter
   (~0.02–0.15) is largely low-volume sampling noise, and its bins were **coarsened to 3 monotone**
@@ -101,7 +101,7 @@ Four sanity checks on the frozen shortlist before building a policy on it:
   default — and holds almost no score (1.1% vs ~89–90% in named cells): score and demographics
   are co-missing, so a score cutoff is only well-posed on the named cells.
 - Named cells order cleanly by risk: three tiers, A/B/C 6.5–7.8%, `(missing)` 11.5%, D/E
-  15.5–16.4% (2.4× spread).
+  15.5–16.4% (2.5× spread).
 - The **current policy misorders** at least one cell: `A/B/C · Formal`, the safest (6.5%), is
   approved less (43.7%) than a riskier A/B/C cell (50.1% at 7.8%) — direct swap-set evidence.
 - `D/E · Formal` (22 labeled / 356 total) merged into `D/E · Autônomo/Formal` — too thin for its
