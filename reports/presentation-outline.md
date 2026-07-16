@@ -52,9 +52,9 @@ vs approval rate ↓ by vintage).
 slice has performance (selection bias).
 
 - The target `OVER30M2` exists **only for the 24,148 `Contratado`** applications (**10.30%**
-  default) — the one slice we can measure.
+  default).
 - A feature snapshot is present at decision time for only **52%** of applications, evenly across
-  `STATUS`. Coverage splits in two: broad variables miss ~**54%**, the open-finance trio ~**95%**.
+  `STATUS`. Coverage splits in two: broad variables non-missing ~**46%**, the open-finance trio ~**5%**.
 
 **Figure** — `fig_coverage_by_status.png` · nb 1.0 (snapshot coverage by STATUS, showing symmetry;
 the labeled 24,148 `Contratado` slice highlighted).
@@ -66,9 +66,9 @@ the labeled 24,148 `Contratado` slice highlighted).
 ## Slide 4 — Q1: Which variables predict default
 
 **Key message:** No single variable discriminates strongly — the policy must **combine
-complementary variables**, not lean on one score.
+complementary variables**.
 
-- No variable reaches the **0.1** "medium" IV threshold: `classe_social` **0.089** >
+- One variable is close to the **0.1** "medium" IV threshold. Ranking: `classe_social` **0.089** >
   `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** >
   `regiao` **0.025**.
 - The open-finance trio (`score_klavi_1`/`Renda`/`risco_aposta`) scores near **0**, driven by
@@ -83,14 +83,13 @@ marked; the open-finance trio near zero from missingness).
 
 ## Slide 5 — Validating the shortlist
 
-**Key message:** All four candidates pass the redundancy, stability, leakage, and fairness checks.
+**Key message:** All four candidates pass the redundancy, stability, and fairness checks.
 
 - **Redundancy** — every pair correlates below **|r| 0.5** (max **0.39**, `classe_social` ×
   `Capacidade Financeira`), splitting into a socioeconomic block and a financial block. *(A naive
   **0.73** between those two is a missing-data artifact.)*
 - **Stability** — three are steady across **13** vintages (PSI **0.02–0.03**); `score_klavi_2`
   drifts once (PSI **0.31**), its bins coarsened to 3 monotone.
-- **Leakage** — none; every candidate is a weak, point-in-time signal.
 - **Fairness** — `regiao` carries signal but is excluded as a proxy for protected attributes.
 
 **Figure** — `fig_psi_over_vintage.png` · nb 2.2 (PSI per variable across SAFRA + IV per vintage;

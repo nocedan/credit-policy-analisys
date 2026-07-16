@@ -91,8 +91,8 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 > Two raw files reconciled to one row per application — and only a labeled slice has performance (**selection bias**).
 
-- The target `OVER30M2` exists **only for the 24,148 `Contratado`** applications (**10.30%** default) — the one slice we can measure.
-- A feature snapshot is present at decision time for only **52%** of applications, evenly across `STATUS`. Coverage splits in two: broad variables miss ~**54%**, the open-finance trio ~**95%**.
+- The target `OVER30M2` exists **only for the 24,148 `Contratado`** applications (**10.30%** default).
+- A feature snapshot is present at decision time for only **52%** of applications, evenly across `STATUS`. Coverage splits in two: broad variables non-missing ~**46%**, the open-finance trio ~**5%**.
 
 <div class="wfig big">
 
@@ -104,9 +104,9 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 ## Q1 — Which variables predict default
 
-> No single variable discriminates strongly — the policy must **combine complementary variables**, not lean on one score.
+> No single variable discriminates strongly — the policy must **combine complementary variables**.
 
-- No variable reaches the **0.1** "medium" IV threshold: `classe_social` **0.089** > `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** > `regiao` **0.025**.
+- One variable is close to the **0.1** "medium" IV threshold. Ranking: `classe_social` **0.089** > `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** > `regiao` **0.025**.
 - The open-finance trio (`score_klavi_1` / `Renda` / `risco_aposta`) scores near **0**, driven by **95.5%** missingness.
 
 <div class="wfig big">
@@ -121,11 +121,10 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 ## Validating the shortlist
 
-> All four candidates pass the redundancy, stability, leakage, and fairness checks.
+> All four candidates pass the redundancy, stability, and fairness checks.
 
 - **Redundancy** — every pair correlates below **|r| 0.5** (max **0.39**, `classe_social` × `Capacidade Financeira`), splitting into a socioeconomic block and a financial block. *(A naive **0.73** between those two is a missing-data artifact.)*
 - **Stability** — three are steady across **13** vintages (PSI **0.02–0.03**); `score_klavi_2` drifts once (PSI **0.31**), its bins coarsened to 3 monotone.
-- **Leakage** — none; every candidate is a weak, point-in-time signal.
 - **Fairness** — `regiao` carries signal but is excluded as a proxy for protected attributes.
 
 <div class="wfig big">
@@ -146,7 +145,7 @@ Deliverable: which variables predict default, which are policy candidates, and a
 - **Tier 2 — Score cut** on `score_klavi_2` *within* each named cell.
 - The named cells fall into three risk tiers: A/B/C **6.5–7.8%** · `(missing)` **11.5%** · D/E **15.5–16.4%** (**2.4×** spread).
 - `(missing)` is **49%** of the book and carries no snapshot, so it sits at a fixed **11.5%** floor; the score cut reaches only the ~**51%** Klavi can see.
-- Today's bar misorders risk: `A/B/C · Formal` (safest, **6.5%**) is approved **43.7%** — less than a riskier A/B/C cell at **50.1%** (**7.8%**).
+- Today's bar misorders risk: `A/B/C · Formal` (safest, **6.5%**) is approved **43.7%** — less than a riskier A/B/C cell at **50.1%** (**7.8%**). *(`D/E · Formal`, 22 labeled, merged into `D/E · Autônomo/Formal`.)*
 
 <div class="wfig sm">
 
