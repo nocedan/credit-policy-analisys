@@ -21,9 +21,9 @@ score axis → trade-off & impact → safe expansion.*
 **Key message:** Reviewing the Fintech's credit-granting policy — using Klavi's variables to
 improve risk assessment.
 
-- Senior Data Scientist @ Klavi; one-week analysis of client-provided data.
-- Deliverable: which variables predict default, which are policy candidates, and an objective
-  proposal.
+- Data Scientist; analysis of client-provided data.
+- Deliverable: which variables predict default, which are policy candidates, and an example of
+  policy review.
 - Author: Daniel Noce da Silva
 
 *Figure: none (title).*
