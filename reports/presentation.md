@@ -157,10 +157,10 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 ## Score orders risk inside a segment
 
-> A score cut is more precise *and* fairer than denying a whole cell.
+> Every named segment hides a wide risk range — the score is what lets the policy see it.
 
-- `score_klavi_2` orders risk **end-to-end in all 5 named cells**; steepest in `D/E · Autônomo/Formal` (**21.4% → 6.1%**).
-- Scoreless applicants inside a named cell default at that cell's own baseline.
+- `score_klavi_2` orders risk **end-to-end in all 5 named cells**; steepest in `D/E · Autônomo/Formal` (**21.4% → 6.1%**, a **3.5×** within-segment spread — wider than the **2.5×** spread *between* segments).
+- Scoreless applicants inside a named cell default at that cell's own baseline (deltas −2.3 to +1.9 pp).
 
 <div class="wfig big">
 
@@ -177,11 +177,11 @@ Deliverable: which variables predict default, which are policy candidates, and a
 <div class="cols">
 <div class="col">
 
-> At the same ~**90%** retention, default drops **10.30% → 9.64%** — measured on the same book using the same risk-tolerance **τ** per segment.
+> Default drops **10.30% → 9.64%** without giving up volume — retention stays at ~**90%**, and **τ** is applied uniformly across segments.
 
-- **Operating point τ\* = 11.5%** on the named segments, read off the τ-swept approval × default frontier *(left)*.
-- Rules: A/B/C no score gate; D/E score ≥ **595** / ≥ **518**, scoreless denied; `(missing)` deferred.
-- The removed **10%** defaults at **16.3%** *(right)*.
+- **Operating point τ\* = 11.5%** on the named segments, read off the τ-swept approval × default frontier *(top)*.
+- Rules: A/B/C no score gate; D/E score ≥ **595** / ≥ **518**, scoreless denied; `(missing)` keeps the client's own current decision — no Klavi snapshot to score it.
+- The removed **10%** defaults at **16.3%** *(bottom)*.
 - The gain comes from re-cutting the ~**51%** named segments (now ~**7.4%**); the **49%** `(missing)` floor passes through unchanged at **11.5%**.
 
 </div>
@@ -202,9 +202,8 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 > Lending to today's rejected is a *hypothesis* — bounded, concentrated, and tested in stages.
 
-- Of ~**119k** rejected, the rules would re-admit ~**43k** (**36%**): almost all **A/B/C** (no score gate, ~**7.4%** expected), only top-score slivers of D/E, and none of `(missing)`.
-- The `(missing)` block stays with the client's own decision, since Klavi has no snapshot there.
-- The cuts already run in current intake (a measured effect); any expansion goes through a **staged, monitored test** that also generates today's missing labels.
+- Of ~**119k** rejected, the rules would re-admit ~**43k** (**36%**): almost all **A/B/C** (no score gate, ~**7.4%** expected), only top-score slivers of D/E.
+- Any expansion goes through a **staged, monitored test**.
 
 <div class="wfig mid">
 
