@@ -133,17 +133,18 @@ seguintes.
 
 **5. Relevância — IV** — *ranking/shortlist 2.1 §2; estabilidade WoE 2.0 §6; PSI/IV 2.2 §3*
 - [x] Ranking IV = discriminação × coverage (2.1 §2): sinal modesto em toda a linha (nenhuma
-      variável ≥ 0,1; nada em território de leakage > 0,5). `classe_social` 0,091 lidera; trio
+      variável ≥ 0,1; nada em território de leakage > 0,5). `classe_social` 0,089 lidera; trio
       open-finance ≈ 0 por causa dos 95,5% de missing.
 - [x] Shortlist `VAR_SELECTION` (congelada em `credit_policy.VAR_SELECTION`): `classe_social`,
       `Capacidade Financeira`, `score_klavi_2`, `status_empregaticio`. **`regiao` (próxima por IV,
       0,025) excluída por fairness** — região é proxy de atributos protegidos (risco de redlining /
       disparate impact).
 - [x] Estabilidade do sinal (visual): WoE por bin ao longo de SAFRA (2.0 §6) —
-      `classe_social` a mais estável; separação de `score_klavi_2` comprime a partir de 202503.
+      `classe_social` a mais estável; separação de `score_klavi_2` comprime nas safras recentes de 2025.
 - [x] **PSI** por variável ao longo de SAFRA e **IV por vintage** (2.2 §3): três estáveis
-      (PSI < 0,03); `score_klavi_2` com PSI 0,32 numa safra e IV volátil (0,01–0,18) → mantida com
-      flag **"watch"** (revisitar bins/recência na Fase 3).
+      (PSI < 0,03); `score_klavi_2` com PSI 0,31 numa safra e IV volátil (0,02–0,15). Seus bins já
+      foram **fundidos em 3 monótonos** (`≤484 | 484–603 | >603`) no 2.2, resolvendo o cruzamento de
+      WoE; mantida com flag **"watch"** — resta só a guarda de recência para o drift populacional na Fase 3.
 
 **6. Redundância** — *2.2 §2*
 - [x] Correlação pós-binning (WoE) entre as candidatas, com correção de co-missingness (matriz
@@ -199,11 +200,12 @@ alcançáveis no estoque não-contratado são inferidos.
 **3.1 — Risco por segmento & WoE do score** (reusa 2.0; input = tabela processada do 3.0) — *notebook 3.1*
 - [x] Baseline por segmento: ordenação A/B/C > `(missing)` > D/E **persiste em 74/78 células
       segmento×safra** (flips todos |WoE| ≤ 0,11, small-n); mix de segmentos com PSI ≤ 0,027 —
-      a estrutura demográfica é a parte estável da política (vs `score_klavi_2` PSI 0,32 no 2.2).
+      a estrutura demográfica é a parte estável da política (vs `score_klavi_2` PSI 0,31 no 2.2).
 - [x] Score dentro de cada segmento: **ordena o risco de ponta a ponta nas 5 células nomeadas**
       (ex.: `D/E · Autônomo/Formal` 21,4%→6,1%, gradiente 3,5× — cutoff por segmento > negar a
-      célula inteira); monotonicidade estrita oscila no meio em 2 células (ruído de bin fino;
-      3.2 varre cutoff contínuo). `(missing)` sem eixo de score utilizável (113 rotuladas).
+      célula inteira); com o score já **fundido em 3 bins monótonos** (2.2), as 5 células declinam
+      limpo de ponta a ponta — o wobble do meio visto sob o corte fino de 4 bins (o corte central
+      não-significativo) desapareceu. `(missing)` sem eixo de score utilizável (113 rotuladas).
 - [x] Regra do score ausente, explícita: sem-score **dentro de célula nomeada** defaulta ao
       baseline do segmento (Δ −2,3 a +1,9 pp vs com-score, sem sinal consistente — não é seleção
       adversa); segmento `(missing)` = célula própria a 11,5% (decisão de apetite no 3.2 +

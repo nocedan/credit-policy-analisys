@@ -13,3 +13,7 @@ __pycache__/
 .vscode/
 .idea/
 .DS_Store
+
+# rendered deck outputs (re-render from reports/presentation.md via marp)
+/reports/presentation.html
+/reports/presentation.pdf

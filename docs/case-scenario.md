@@ -23,7 +23,7 @@
 
 **Why now.** Delinquency (`OVER30M2`) rose from ~8–10% (2024 cohorts) to 12.5%
 (Jun/2025) while the approval rate fell from ~54% to ~40%: the bar was tightened and, even so,
-default worsened. The current process responds to the scenario by *approving less* -- our proposal would be to *approve better*.
+default worsened. The current process responds to the scenario by *approving less* -- our proposal is to *improve how risk is assessed*.
 
 **How to read the numbers.** Everything that is *measured* comes from the labeled sample — the 24,148 `Contracted`
 (10.3% default), the only one with observable performance; the
@@ -33,7 +33,7 @@ proposal addresses this point head-on (item Q3, "safe expansion").
 No single variable discriminates strongly — `classe_social` leads, followed closely by `Financial Capacity`, `score_klavi_2` and
 `status_empregaticio`. The "open-finance" trio (`score_klavi_1`, `Renda`, `risco_aposta`) is unusable, but because it is **missing in 95.5% of applications**. *Implication:* the policy must
 **combine complementary variables**, not rely on a single score. (IV ranking: `classe_social`
-0.091 > `Financial Capacity` 0.067 > `score_klavi_2` 0.034 > `status_empregaticio` 0.031 >
+0.089 > `Financial Capacity` 0.067 > `score_klavi_2` 0.034 > `status_empregaticio` 0.031 >
 `regiao` 0.025.)
 
 **Q2 — Which are good candidates for a practical policy (rules + score)?**
