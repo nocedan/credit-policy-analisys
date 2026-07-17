@@ -10,6 +10,8 @@ Credit-granting policy review using Klavi's variables. Pure analysis repo — no
 
 `docs/case-scenario.md` (the brief) → `docs/analysis-plan.md` (phased plan + working conventions) → `notebooks/` (the work) → `reports/key_takeaways.md` (findings) → back to plan.
 
+The presentation deck extends that chain: `reports/key_takeaways.md` + `docs/case-scenario.md` §"Answers" + `notebooks/` → `reports/presentation-outline.md` (slide-by-slide key messages, bullets, figure refs) → `reports/presentation.md` (the Marp deck itself) → `reports/presentation.html` / `reports/presentation.pdf` (rendered outputs). Keep numbers reconciled with `key_takeaways.md`; keep `presentation.md` in sync with `presentation-outline.md` when either changes.
+
 Start any session by reading the plan and the takeaways; each doc owns its own detail — don't duplicate it here.
 
 ## Environment & running
