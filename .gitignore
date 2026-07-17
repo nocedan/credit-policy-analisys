@@ -9,6 +9,12 @@ __pycache__/
 *.py[cod]
 .venv/
 
+# packaging / pytest
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+
 # editors / OS
 .vscode/
 .idea/
