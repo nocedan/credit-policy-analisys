@@ -35,10 +35,6 @@ def save_policy(policy, path):
     path.write_text(_HEADER + body, encoding="utf-8")
 
 
-def load_policy(path):
-    return yaml.safe_load(Path(path).read_text(encoding="utf-8"))
-
-
 def approve(df, policy, seg_col="segmento", score_col="score_klavi_2", status_col="STATUS"):
     """Boolean approval mask for `df` under `policy`."""
     ok = pd.Series(False, index=df.index)
