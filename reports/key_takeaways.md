@@ -32,19 +32,6 @@ One section per notebook.
 - `has_snapshot` / `has_open_finance` (anchored on `Renda`) added as explicit coverage-segment
   flags for Fase 2.
 
-## 1.2 — Application Multiplicity & Grain
-
-- `(uuid, DATA)` is unique; `(uuid, SAFRA)` is not — 8,305 users re-applied within a single month
-  (10,780 rows above the monthly grain), always intra-month by construction.
-- `Contratado` evidence: 88 users hold two contracts in one month, always on distinct dates
-  (median 7 days apart), 7 with conflicting `OVER30M2` — provably distinct contracts, not
-  duplicates.
-- Counterfactual dedup upside ≈ **0** (snapshot availability tracks the `uuid`, not the row) while
-  the downside is real: 51 groups would lose open-finance, 143 keep a less-complete survivor,
-  1,063 hold conflicting feature values.
-- **Decision**: keep the `(uuid, DATA)` grain, no dedup. User-level over-representation in
-  IV/WoE becomes a Fase 2 weighting decision (resolved in 2.2 §5: negligible impact).
-
 ## 2.0 — Binning Workbench
 
 - Turns binning into a hand-tunable, git-tracked artifact: `estimate_spec` seeds
@@ -72,7 +59,7 @@ One section per notebook.
 
 ## 2.2 — Shortlist Validation
 
-Four sanity checks on the frozen shortlist before building a policy on it:
+Two sanity checks on the frozen shortlist before building a policy on it:
 
 - **Redundancy**: all four are genuinely different signal — strongest overlap `classe_social` ×
   `Capacidade Financeira` at 0.39 (under the 0.5 threshold). A naive 0.73 correlation between
@@ -84,10 +71,6 @@ Four sanity checks on the frozen shortlist before building a policy on it:
   (~0.02–0.15) is largely low-volume sampling noise, and its bins were **coarsened to 3 monotone**
   (the finer middle cut was not statistically significant). Kept but flagged **"watch"** for the
   drift. See `references/woe-bin-significance-testing.md`.
-- **Leakage**: none — every candidate is weak-tier (IV < 0.1), and all are point-in-time
-  snapshots by construction. Clean.
-- **Weighting**: one-row-per-`uuid` drops only 849 of 24,148 rows; IV changes < 0.001, ranking
-  unchanged. Robust to the multiplicity flagged in 1.2.
 - **Bottom line**: all four variables pass and move to Fase 3; `score_klavi_2` carries a watch
   flag. `regiao` stays excluded on fairness grounds.
 
