@@ -20,6 +20,8 @@ Start any session by reading the plan and the takeaways; each doc owns its own d
 - Run snippets with `conda run -n credit-policy python ...`; execute a notebook headlessly with
   `conda run -n credit-policy jupyter nbconvert --to notebook --execute --inplace notebooks/<name>.ipynb`.
 - Notebooks resolve the project root as `Path.cwd().parent`, so execute them with `notebooks/` as the working directory.
+- The `credit_policy` package is an editable install in the env (`pip install -e . --no-deps`), so `import credit_policy` works without the `sys.path` hack.
+- Run tests with `conda run -n credit-policy pytest -q`. The env sets `PYTHONNOUSERSITE=1` (via `conda env config vars`) so it ignores `~/.local/lib/python3.12/site-packages` — otherwise a stray user-site pytest there shadows the env's copy on `sys.path` and breaks the run.
 
 ## Data
 

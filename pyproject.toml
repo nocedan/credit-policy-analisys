@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "credit-policy"            # distribution name (import name stays `credit_policy`)
+version = "0.1.0"
+description = "Credit-granting policy analysis helpers (WoE/IV, binning, segments, policy)."
+requires-python = ">=3.12"
+dependencies = [                  # documents what the package needs; conda env already provides them
+    "pandas", "numpy", "pyyaml", "matplotlib", "seaborn", "pyarrow",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.setuptools.packages.find]
+where = ["src"]                   # discovers the `credit_policy` package under src/
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]              # belt-and-suspenders: tests import credit_policy even without the editable install
+markers = [
+    "data: test requires local parquet under data/ (skipped when the file is absent)",
+]
