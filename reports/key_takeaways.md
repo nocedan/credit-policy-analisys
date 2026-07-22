@@ -120,3 +120,29 @@ Two sanity checks on the frozen shortlist before building a policy on it:
   `(missing)`'s 57.8k `Reprovado` stay denied — Klavi doesn't second-guess the client's own
   decision on the block it can't see. Recommendation: adopt named-segment cutoffs on current
   intake, expand into named-segment `Reprovado` only via a staged, monitored test.
+
+## 4.1 — Deterioration Decomposition
+
+Why did default rise from ~9.5% (2024) to 12.5% (202506)? Three mechanisms separated on
+over-time curves, then quantified with a shift-share decomposition (anchor = pooled 2024).
+
+- **Maturity guard passes**: all 13 safras are 100% labeled (`OVER30M2` is a fixed 2-month
+  window), so 202506's 12.5% is real deterioration, not an immature cohort.
+- **Mix shift — favorable, not adverse**: intake moved the *safe* way — `(missing)` fell from
+  50.7% to 43.8% of applications while every A/B/C cell grew. The deterioration was not
+  imported through who applies.
+- **Policy effect — volume tightening, not risk re-ordering**: 202412 is a single ~−12pp level
+  shift applied to *every* segment (total approval 53% → 36%, partial recovery to ~45%). D/E
+  fell most, but the safest cells were cut too; `A/B/C · Formal` stays approved **below**
+  `A/B/C · Autônomo` in all 13 safras — the 3.0 misordering is chronic, not episodic.
+- **Within-segment deterioration — the actual cause**: every segment performs worse in 2025
+  (`A/B/C · Desconhecido` 6.4% → 9.3%, `D/E · Desconhecido` 13.5% → 18.0%, `(missing)`
+  10.7% → 12.7%) — broad-based inside the cells, not concentrated in one profile.
+- **Shift-share headline**: at 202506 vs the 2024 baseline (9.51%), total **+2.97pp = mix
+  −0.36pp + within-segment +3.32pp** (closes exactly). Tightening *did* improve the book mix;
+  the entire rise is worse performance inside every cell — pointing to macro/vintage causes and
+  pricing/limit levers, not further volume cuts. Figure exported:
+  `reports/figures/fig_deterioration_decomposition.png`.
+- **Take-up flag**: take-up among approved rose from ~22% (2024) to ~27–28% (2025 peak) as the
+  bar tightened — a mild adverse-selection signal (accepters increasingly have fewer outside
+  options); worth monitoring, not yet actionable.
