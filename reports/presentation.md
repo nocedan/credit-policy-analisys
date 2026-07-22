@@ -66,7 +66,12 @@ section.title .meta { font-size:19px; color:#bfe0e0; line-height:1.7; }
 <div class="meta">
 Daniel Noce da Silva — Data Scientist<br>
 Analysis of client-provided data<br>
-Deliverable: which variables predict default, which are policy candidates, and an example of policy review
+Deliverable:
+<ul>
+<li>Which variables predict default?</li>
+<li>Which are practical policy candidates</li>
+<li>Example of policy review.</li>
+</ul>
 </div>
 
 ---
@@ -92,7 +97,7 @@ Deliverable: which variables predict default, which are policy candidates, and a
 > Two raw files reconciled to one row per application — and only a labeled slice has performance (**selection bias**).
 
 - The target `OVER30M2` exists **only for the 24,148 `Contratado`** applications (**10.30%** default).
-- A feature snapshot is present at decision time for only **52%** of applications, evenly across `STATUS`. Coverage splits in two: broad variables non-missing ~**46%**, the open-finance trio ~**5%**.
+- A feature snapshot is present at decision time for only **52%** of applications, evenly across `STATUS`. Coverage splits in two: broad variables non-missing ~**46%**, The 5% Trio ~**5%**.
 
 <div class="wfig big">
 
@@ -106,8 +111,8 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 > No single variable discriminates strongly — the policy must **combine complementary variables**.
 
-- One variable is close to the **0.1** "medium" IV threshold. Ranking: `classe_social` **0.089** > `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** > `regiao` **0.025**.
-- The open-finance trio (`score_klavi_1` / `Renda` / `risco_aposta`) scores near **0**, driven by **95.5%** missingness.
+- Ranking: `classe_social` **0.089** > `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** > `regiao` **0.025**.
+- The 5% Trio (`score_klavi_1` / `Renda` / `risco_aposta`) scores near **0**, driven by **95.5%** missingness.
 
 <div class="wfig big">
 
@@ -139,15 +144,13 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 ## Q3 — A two-tier policy
 
-> Segment by the stable socioeconomic block — which orders cleanly into three risk tiers (**2.5×** spread) — then score-cut within each named cell.
+> Segment by the stable socioeconomic block — then score-cut within each named cell.
 
-- **Tier 1 — Segment** by `classe_social` × `status_empregaticio`: **5** named cells + `(missing)`.
+- **Tier 1 — Segment** by `classe_social` × `status_empregaticio`.
 - **Tier 2 — Score cut** on `score_klavi_2` *within* each named cell.
 - The named cells fall into three risk tiers: A/B/C **6.5–7.8%** · `(missing)` **11.5%** · D/E **15.5–16.4%** (**2.5×** spread).
-- `(missing)` is **49%** of the book and carries no snapshot, so it sits at a fixed **11.5%** floor; the score cut reaches only the ~**51%** Klavi can see.
-- Today's bar misorders risk: `A/B/C · Formal` (safest, **6.5%**) is approved **43.7%** — less than a riskier A/B/C cell at **50.1%** (**7.8%**). *(`D/E · Formal`, 22 labeled, merged into `D/E · Autônomo/Formal`.)*
 
-<div class="wfig sm">
+<div class="wfig big">
 
 ![](figures/fig_segment_risk_tiers.png)
 
@@ -157,10 +160,11 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 ## Score orders risk inside a segment
 
-> Every named segment hides a wide risk range — the score is what lets the policy see it.
+> Every segment hides risk discrimination range.
 
-- `score_klavi_2` orders risk **end-to-end in all 5 named cells**; steepest in `D/E · Autônomo/Formal` (**21.4% → 6.1%**, a **3.5×** within-segment spread — wider than the **2.5×** spread *between* segments).
+- `score_klavi_2` orders risk **end-to-end in all 5 named cells**.
 - Scoreless applicants inside a named cell default at that cell's own baseline (deltas −2.3 to +1.9 pp).
+- The risk interpretation: `classe_social`/`status_empregaticio` are structural — slow-moving, socioeconomic; `score_klavi_2` is presumably behavioral.
 
 <div class="wfig big">
 
@@ -180,9 +184,9 @@ Deliverable: which variables predict default, which are policy candidates, and a
 > Default drops **10.30% → 9.64%** without giving up volume — retention stays at ~**90%**, and **τ** is applied uniformly across segments.
 
 - **Operating point τ\* = 11.5%** on the named segments, read off the τ-swept approval × default frontier *(top)*.
-- Rules: A/B/C no score gate; D/E score ≥ **595** / ≥ **518**, scoreless denied; `(missing)` keeps the client's own current decision — no Klavi snapshot to score it.
 - The removed **10%** defaults at **16.3%** *(bottom)*.
-- The gain comes from re-cutting the ~**51%** named segments (now ~**7.4%**); the **49%** `(missing)` floor passes through unchanged at **11.5%**.
+- The gain comes from re-cutting the ~**51%** named segments (now ~**7.4%**).
+- Rules: A/B/C no score gate; D/E score ≥ **595** / ≥ **518**, scoreless denied; `(missing)` keeps the client's own current decision.
 
 </div>
 <div class="col figs">
@@ -198,14 +202,15 @@ Deliverable: which variables predict default, which are policy candidates, and a
 
 <!-- _class: dense -->
 
-## Safe expansion under selection bias
+## Expansion potential
 
 > Lending to today's rejected is a *hypothesis* — bounded, concentrated, and tested in stages.
 
-- Of ~**119k** rejected, the rules would re-admit ~**43k** (**36%**): almost all **A/B/C** (no score gate, ~**7.4%** expected), only top-score slivers of D/E.
-- Any expansion goes through a **staged, monitored test**.
+- Of ~**119k** rejected, the rules would re-admit ~**43k** (**36%**)
+- Almost all **A/B/C** (no score gate, ~**7.4%** expected)
+- Only top-score slivers of D/E.
 
-<div class="wfig mid">
+<div class="wfig big">
 
 ![](figures/fig_expansion_by_segment.png)
 

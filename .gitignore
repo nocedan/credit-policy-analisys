@@ -23,3 +23,4 @@ dist/
 # rendered deck outputs (re-render from reports/presentation.md via marp)
 /reports/presentation.html
 /reports/presentation.pdf
+/reports/presentation.pptx
