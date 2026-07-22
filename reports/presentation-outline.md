@@ -14,16 +14,22 @@ refresh one). Assemble the deck against this outline; keep numbers reconciled wi
 Storyline: *why now → the data & its catch → Q1 variables → validation → policy & risk tiers →
 score axis → trade-off & impact → safe expansion.*
 
+**Naming.** The "open-finance trio" (`score_klavi_1`/`Renda`/`risco_aposta`, ~95.5% missing) is
+presented as **The 5% Trio** — a deck-only rename; `key_takeaways.md` and `case-scenario.md`
+keep the original "open-finance trio" wording.
+
 ---
 
 ## Slide 1 — Title
 
 **Key message:** Reviewing the Fintech's credit-granting policy — using Klavi's variables to
-improve risk assessment.
+improve risk assessment. Analysis of client-provided data.
 
-- Data Scientist; analysis of client-provided data.
-- Deliverable: which variables predict default, which are policy candidates, and an example of
-  policy review.
+- Data Scientist; 
+- Deliverable: 
+    - Which variables predict default?
+    - Which are practical policy candidates
+    - Example of policy review.
 - Author: Daniel Noce da Silva
 
 *Figure: none (title).*
@@ -54,7 +60,7 @@ slice has performance (selection bias).
 - The target `OVER30M2` exists **only for the 24,148 `Contratado`** applications (**10.30%**
   default).
 - A feature snapshot is present at decision time for only **52%** of applications, evenly across
-  `STATUS`. Coverage splits in two: broad variables non-missing ~**46%**, the open-finance trio ~**5%**.
+  `STATUS`. Coverage splits in two: broad variables non-missing ~**46%**, The 5% Trio ~**5%**.
 
 **Figure** — `fig_coverage_by_status.png` · nb 1.0 (snapshot coverage by STATUS, showing symmetry;
 the labeled 24,148 `Contratado` slice highlighted).
@@ -71,11 +77,11 @@ complementary variables**.
 - One variable is close to the **0.1** "medium" IV threshold. Ranking: `classe_social` **0.089** >
   `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** >
   `regiao` **0.025**.
-- The open-finance trio (`score_klavi_1`/`Renda`/`risco_aposta`) scores near **0**, driven by
+- The 5% Trio (`score_klavi_1`/`Renda`/`risco_aposta`) scores near **0**, driven by
   **95.5%** missingness.
 
 **Figure** — `fig_iv_ranking.png` · nb 2.1 (horizontal IV bar ranking; 0.1 "medium" threshold
-marked; the open-finance trio near zero from missingness).
+marked; The 5% Trio near zero from missingness).
 
 ![Information Value per variable, all weak-tier below 0.1](figures/fig_iv_ranking.png)
 

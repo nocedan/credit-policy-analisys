@@ -66,7 +66,12 @@ section.title .meta { font-size:19px; color:#bfe0e0; line-height:1.7; }
 <div class="meta">
 Daniel Noce da Silva — Data Scientist<br>
 Analysis of client-provided data<br>
-Deliverable: which variables predict default, which are policy candidates, and an example of policy review
+Deliverable:
+<ul>
+<li>Which variables predict default?</li>
+<li>Which are practical policy candidates</li>
+<li>Example of policy review.</li>
+</ul>
 </div>
 
 ---
@@ -92,7 +97,7 @@ Deliverable: which variables predict default, which are policy candidates, and a
 > Two raw files reconciled to one row per application — and only a labeled slice has performance (**selection bias**).
 
 - The target `OVER30M2` exists **only for the 24,148 `Contratado`** applications (**10.30%** default).
-- A feature snapshot is present at decision time for only **52%** of applications, evenly across `STATUS`. Coverage splits in two: broad variables non-missing ~**46%**, the open-finance trio ~**5%**.
+- A feature snapshot is present at decision time for only **52%** of applications, evenly across `STATUS`. Coverage splits in two: broad variables non-missing ~**46%**, The 5% Trio ~**5%**.
 
 <div class="wfig big">
 
@@ -107,7 +112,7 @@ Deliverable: which variables predict default, which are policy candidates, and a
 > No single variable discriminates strongly — the policy must **combine complementary variables**.
 
 - One variable is close to the **0.1** "medium" IV threshold. Ranking: `classe_social` **0.089** > `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** > `regiao` **0.025**.
-- The open-finance trio (`score_klavi_1` / `Renda` / `risco_aposta`) scores near **0**, driven by **95.5%** missingness.
+- The 5% Trio (`score_klavi_1` / `Renda` / `risco_aposta`) scores near **0**, driven by **95.5%** missingness.
 
 <div class="wfig big">
 
