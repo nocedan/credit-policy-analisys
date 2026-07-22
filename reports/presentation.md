@@ -111,7 +111,7 @@ Deliverable:
 
 > No single variable discriminates strongly — the policy must **combine complementary variables**.
 
-- One variable is close to the **0.1** "medium" IV threshold. Ranking: `classe_social` **0.089** > `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** > `regiao` **0.025**.
+- Ranking: `classe_social` **0.089** > `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** > `regiao` **0.025**.
 - The 5% Trio (`score_klavi_1` / `Renda` / `risco_aposta`) scores near **0**, driven by **95.5%** missingness.
 
 <div class="wfig big">
@@ -160,10 +160,11 @@ Deliverable:
 
 ## Score orders risk inside a segment
 
-> Every named segment hides a wide risk range — the score is what lets the policy see it.
+> Every segment hides risk discrimination range.
 
-- `score_klavi_2` orders risk **end-to-end in all 5 named cells**; steepest in `D/E · Autônomo/Formal` (**21.4% → 6.1%**, a **3.5×** within-segment spread — wider than the **2.5×** spread *between* segments).
+- `score_klavi_2` orders risk **end-to-end in all 5 named cells**.
 - Scoreless applicants inside a named cell default at that cell's own baseline (deltas −2.3 to +1.9 pp).
+- The risk interpretation: `classe_social`/`status_empregaticio` are structural — slow-moving, socioeconomic; `score_klavi_2` is presumably behavioral.
 
 <div class="wfig big">
 
@@ -183,9 +184,9 @@ Deliverable:
 > Default drops **10.30% → 9.64%** without giving up volume — retention stays at ~**90%**, and **τ** is applied uniformly across segments.
 
 - **Operating point τ\* = 11.5%** on the named segments, read off the τ-swept approval × default frontier *(top)*.
-- Rules: A/B/C no score gate; D/E score ≥ **595** / ≥ **518**, scoreless denied; `(missing)` keeps the client's own current decision — no Klavi snapshot to score it.
 - The removed **10%** defaults at **16.3%** *(bottom)*.
-- The gain comes from re-cutting the ~**51%** named segments (now ~**7.4%**); the **49%** `(missing)` floor passes through unchanged at **11.5%**.
+- The gain comes from re-cutting the ~**51%** named segments (now ~**7.4%**).
+- Rules: A/B/C no score gate; D/E score ≥ **595** / ≥ **518**, scoreless denied; `(missing)` keeps the client's own current decision.
 
 </div>
 <div class="col figs">
@@ -201,14 +202,15 @@ Deliverable:
 
 <!-- _class: dense -->
 
-## Safe expansion under selection bias
+## Expansion potential
 
 > Lending to today's rejected is a *hypothesis* — bounded, concentrated, and tested in stages.
 
-- Of ~**119k** rejected, the rules would re-admit ~**43k** (**36%**): almost all **A/B/C** (no score gate, ~**7.4%** expected), only top-score slivers of D/E.
-- Any expansion goes through a **staged, monitored test**.
+- Of ~**119k** rejected, the rules would re-admit ~**43k** (**36%**)
+- Almost all **A/B/C** (no score gate, ~**7.4%** expected)
+- Only top-score slivers of D/E.
 
-<div class="wfig mid">
+<div class="wfig big">
 
 ![](figures/fig_expansion_by_segment.png)
 

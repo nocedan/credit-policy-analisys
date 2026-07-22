@@ -122,12 +122,11 @@ unlabeled stock outside the book).
 
 ## Slide 7 — Score orders risk inside a segment
 
-**Key message:** Every named segment hides a wide risk range — the score is what lets the policy see it.
+**Key message:** Every segment hides risk discrimination range.
 
-- `score_klavi_2` orders risk **end-to-end in all 5 named cells**; steepest in
-  `D/E · Autônomo/Formal` (**21.4% → 6.1%**, a **3.5×** within-segment spread — wider than the
-  **2.5×** spread *between* segments).
+- `score_klavi_2` orders risk **end-to-end in all 5 named cells**;
 - Scoreless applicants inside a named cell default at that cell's own baseline (deltas −2.3 to +1.9 pp).
+- The risk interpretation. classe_social/status_empregaticio are structural — slow-moving, socioeconomic. score_klavi_2 is presumably behavioral. 
 
 **Figure** — `fig_score_within_segment.png` · nb 3.1 (default rate by score bin within each named
 segment; steepest gradient in `D/E · Autônomo/Formal`).
@@ -143,10 +142,9 @@ segment; steepest gradient in `D/E · Autônomo/Formal`).
 
 - **Operating point τ\* = 11.5%** on the named segments, read off the τ-swept approval × default
   frontier *(top figure)*.
-- Rules: A/B/C no score gate; D/E score ≥ **595** / ≥ **518**, scoreless denied; `(missing)` keeps the client's own current decision — no Klavi snapshot to score it.
 - The removed **10%** defaults at **16.3%** *(bottom figure)*.
-- The gain comes from re-cutting the ~**51%** named segments (now ~**7.4%**); the **49%** `(missing)`
-  floor passes through unchanged at **11.5%**.
+- The gain comes from re-cutting the ~**51%** named segments (now ~**7.4%**);
+- Rules: A/B/C no score gate; D/E score ≥ **595** / ≥ **518**, scoreless denied; `(missing)` keeps the client's own current decision.
 
 **Figures** — `fig_tradeoff_frontier.png` · nb 3.2 (retention × default frontier, one point per τ;
 τ\* = 11.5% and the `(missing)` floor marked) and `fig_swapset_impact.png` · nb 3.2 (keep-all vs
@@ -158,15 +156,15 @@ policy v1 on the same 24,148 rows: default 10.30% → 9.64% at ~90% retention).
 
 ---
 
-## Slide 9 — Safe expansion under selection bias
+## Slide 9 — Expansion potential
 
 **Key message:** Lending to today's rejected is a *hypothesis* — bounded, concentrated, and tested
 in stages.
 
-- Of ~**119k** rejected, the rules would re-admit ~**43k** (**36%**): almost all **A/B/C** (no score
-  gate, ~**7.4%** expected), only top-score slivers of D/E.
-- Any expansion goes through a
-  **staged, monitored test**.
+- Of ~**119k** rejected, the rules would re-admit ~**43k** (**36%**)
+- Almost all **A/B/C** (no score
+  gate, ~**7.4%** expected)
+- Only top-score slivers of D/E.
 
 **Figure** — `fig_expansion_by_segment.png` · nb 3.2 (re-admittable `Reprovado` volume by segment:
 A/B/C concentration, D/E slivers, `(missing)` excluded — 43,093 of 119,247, 36%).
