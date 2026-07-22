@@ -74,7 +74,7 @@ the labeled 24,148 `Contratado` slice highlighted).
 **Key message:** No single variable discriminates strongly — the policy must **combine
 complementary variables**.
 
-- One variable is close to the **0.1** "medium" IV threshold. Ranking: `classe_social` **0.089** >
+- Ranking: `classe_social` **0.089** >
   `Capacidade Financeira` **0.067** > `score_klavi_2` **0.034** > `status_empregaticio` **0.031** >
   `regiao` **0.025**.
 - The 5% Trio (`score_klavi_1`/`Renda`/`risco_aposta`) scores near **0**, driven by
@@ -106,18 +106,12 @@ marked; The 5% Trio near zero from missingness).
 
 ## Slide 6 — Q3: A two-tier policy
 
-**Key message:** A two-tier policy: segment by the stable socioeconomic block — which orders
-cleanly into three risk tiers (2.5× spread) — then score-cut within each named cell.
+**Key message:** A two-tier policy: segment by the stable socioeconomic block — then score-cut within each named cell.
 
-- **Tier 1 — Segment** by `classe_social` × `status_empregaticio`: **5** named cells + `(missing)`.
+- **Tier 1 — Segment** by `classe_social` × `status_empregaticio`.
 - **Tier 2 — Score cut** on `score_klavi_2` *within* each named cell.
 - The named cells fall into three risk tiers: A/B/C **6.5–7.8%** · `(missing)` **11.5%** ·
   D/E **15.5–16.4%** (**2.5×** spread).
-- `(missing)` is **49%** of the book so it sits at a fixed **11.5%** floor;
-  the score cut reaches only the ~**51%** Klavi can see.
-- Today's bar misorders risk: `A/B/C · Formal` (safest, **6.5%**) is approved **43.7%** — less than
-  a riskier A/B/C cell at **50.1%** (**7.8%**). *(`D/E · Formal`, 22 labeled, merged into
-  `D/E · Autônomo/Formal`.)*
 
 **Figure** — `fig_segment_risk_tiers.png` · nb 3.0 (measured default rate by segment vs the
 unlabeled stock outside the book).
